@@ -1165,7 +1165,7 @@
     function updateHud() {
       el.hudPlayer.textContent = playerId || 'P-0000';
       el.hudScore.textContent = padScore(score);
-      el.hudLevel.textContent = confirmed ? '02' : '01';
+      el.hudLevel.textContent = confirmed ? '01' : '01';
       el.hudStatus.textContent = confirmed ? 'Mission' : 'Ready';
       el.playerRank.textContent = rankFromScore(score);
     }
