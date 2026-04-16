@@ -1070,6 +1070,12 @@
         </div>
       </section>
 
+      <!-- MINI GAME SCREEN -->
+      <section class="hidden" id="gameScreen" style="width:100%;height:100%;position:relative;">
+        <div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);font-size:18px;color:#fff;">CATCH GAME • TAP ITEMS!</div>
+        <div id="gameArea" style="position:absolute;inset:60px 10px 10px 10px;border:4px solid #111;background:rgba(0,0,0,0.2);overflow:hidden;"></div>
+      </section>
+
       <section class="result-screen hidden" id="resultScreen">
         <div class="result-card">
           <div class="result-top">
@@ -1481,15 +1487,10 @@
 
     function showResult() {
       const current = getCurrentItem();
-      playerRank = calculateRank(score);
       el.selectScreen.classList.add('hidden');
-      el.resultScreen.classList.remove('hidden');
-      el.resultIcon.textContent = current.icon;
-      el.resultItem.textContent = current.name;
-      el.resultPlayer.textContent = playerId;
-      el.resultScore.textContent = padScore(score);
-      el.resultRank.textContent = playerRank;
-      el.resultSubtitle.textContent = `You selected ${current.name.toUpperCase()} and reached ${playerRank.toUpperCase()}.`;
+      document.getElementById('gameScreen').classList.remove('hidden');
+      startMiniGame(current);
+    } and reached ${playerRank.toUpperCase()}.`;
       updateHud();
       flashScreen();
     }
@@ -1608,6 +1609,73 @@
     document.addEventListener('keydown', handleKeydown);
 
     initAmbientEffects();
+
+    // MINI GAME
+    function startMiniGame(item){
+      let gameArea = document.getElementById('gameArea');
+      let gameScore = 0;
+      let time = 8;
+
+      let timerText = document.createElement('div');
+      timerText.style.position='absolute';
+      timerText.style.top='10px';
+      timerText.style.left='10px';
+      timerText.style.color='white';
+      timerText.innerText='Time: '+time;
+      gameArea.appendChild(timerText);
+
+      let spawn = setInterval(()=>{
+        let obj = document.createElement('div');
+        obj.innerText = item.icon;
+        obj.style.position='absolute';
+        obj.style.left=Math.random()*90+'%';
+        obj.style.top='0px';
+        obj.style.fontSize='30px';
+        obj.style.cursor='pointer';
+
+        obj.onclick=()=>{
+          gameScore+=10;
+          obj.remove();
+        }
+
+        gameArea.appendChild(obj);
+
+        let fall=setInterval(()=>{
+          obj.style.top=(obj.offsetTop+5)+'px';
+          if(obj.offsetTop>gameArea.offsetHeight){
+            obj.remove();
+            clearInterval(fall);
+          }
+        },30);
+
+      },600);
+
+      let countdown=setInterval(()=>{
+        time--;
+        timerText.innerText='Time: '+time;
+
+        if(time<=0){
+          clearInterval(spawn);
+          clearInterval(countdown);
+          gameArea.innerHTML='';
+          finalScreen(gameScore,item);
+        }
+      },1000);
+    }
+
+    function finalScreen(score,item){
+      document.getElementById('gameScreen').classList.add('hidden');
+      el.resultScreen.classList.remove('hidden');
+
+      let expoDate = '10052026';
+
+      el.resultIcon.textContent = item.icon;
+      el.resultItem.textContent = item.name;
+      el.resultPlayer.textContent = playerId;
+      el.resultScore.textContent = score;
+      el.resultRank.textContent = calculateRank(score);
+      el.resultSubtitle.textContent = `STAY TUNED • MISSION START SOON • ${expoDate}`;
+    }
     applyTimeTheme();
     updateExpoCountdown();
     setInterval(updateExpoCountdown, 60000);
