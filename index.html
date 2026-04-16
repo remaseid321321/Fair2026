@@ -78,12 +78,176 @@ button{
   0%{opacity:0.3;}
   100%{opacity:1;}
 }
+body{
+  margin:0;
+  font-family: monospace;
+  overflow:hidden;
+}
 
+/* SKY */
+.sky{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:60%;
+  background: linear-gradient(#87ceeb, #cfefff);
+  z-index:-5;
+}
+
+/* SUN */
+.sun{
+  position:fixed;
+  top:40px;
+  right:40px;
+  width:90px;
+  height:90px;
+  background:yellow;
+  border-radius:50%;
+  box-shadow:0 0 50px yellow;
+  z-index:-4;
+}
+
+/* SEA */
+.sea{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:45%;
+  background:#0077be;
+  z-index:-4;
+  overflow:hidden;
+}
+
+/* WAVES */
+.wave{
+  position:absolute;
+  top:-20px;
+  left:-50%;
+  width:200%;
+  height:60px;
+  background:rgba(255,255,255,0.25);
+  border-radius:50%;
+  animation:waveMove 6s linear infinite;
+}
+
+.wave:nth-child(2){
+  top:10px;
+  opacity:0.5;
+  animation-duration:8s;
+}
+
+.wave:nth-child(3){
+  top:30px;
+  opacity:0.3;
+  animation-duration:10s;
+}
+
+@keyframes waveMove{
+  0%{transform:translateX(0);}
+  100%{transform:translateX(50%);}
+}
+
+/* 🌴 PALM TREE */
+.palm{
+  position:fixed;
+  bottom:120px;
+  left:40px;
+  font-size:60px;
+  animation:sway 3s ease-in-out infinite;
+  z-index:-3;
+}
+
+@keyframes sway{
+  0%,100%{transform:rotate(-3deg);}
+  50%{transform:rotate(3deg);}
+}
+
+/* 🏝️ ISLAND (PIXEL STYLE) */
+.island{
+  position:fixed;
+  bottom:120px;
+  right:120px;
+  font-size:40px;
+  animation:float 4s ease-in-out infinite;
+  z-index:-3;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-10px);}
+}
+
+/* 🐚 FLOATING SHELLS */
+.shell{
+  position:fixed;
+  font-size:20px;
+  opacity:0.7;
+  animation:rise 8s linear infinite;
+  z-index:-3;
+}
+
+.shell:nth-child(1){ left:20%; bottom:10%; animation-delay:0s;}
+.shell:nth-child(2){ left:50%; bottom:5%; animation-delay:2s;}
+.shell:nth-child(3){ left:80%; bottom:15%; animation-delay:4s;}
+
+@keyframes rise{
+  0%{transform:translateY(0); opacity:0;}
+  20%{opacity:1;}
+  100%{transform:translateY(-300px); opacity:0;}
+}
+
+/* 🎮 SCANLINES EFFECT */
+.scanlines{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.05),
+    rgba(0,0,0,0.05) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  z-index:999;
+  pointer-events:none;
+}
+  
 </style>
 </head>
 
 <body>
+<div class="sky"></div>
 
+<div class="sun"></div>
+
+<div class="sea">
+  <div class="wave"></div>
+  <div class="wave"></div>
+  <div class="wave"></div>
+</div>
+  <div class="sky"></div>
+
+<div class="sun"></div>
+
+<div class="sea">
+  <div class="wave"></div>
+  <div class="wave"></div>
+  <div class="wave"></div>
+</div>
+
+<div class="palm">🌴</div>
+
+<div class="island">🏝️</div>
+
+<div class="shell">🐚</div>
+<div class="shell">🐚</div>
+<div class="shell">🐚</div>
+
+<div class="scanlines"></div>
 <h1>CHOOSE YOUR SUMMER ITEM ☀️</h1>
 
 <div class="box" id="icon">🕶️</div>
