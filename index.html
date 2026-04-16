@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Summer Arcade Select</title>
+
+<style>
+body{
+  margin:0;
+  font-family: monospace;
+  background:#061726;
+  color:white;
+  text-align:center;
+}
+
+/* TITLE */
+h1{
+  margin-top:20px;
+  font-size:20px;
+}
+
+/* CARD AREA */
+.box{
+  margin-top:40px;
+  font-size:80px;
+}
+
+/* ITEM NAME */
+.name{
+  margin-top:10px;
+  font-size:18px;
+  letter-spacing:2px;
+}
+
+/* ARROWS */
+.arrows{
+  display:flex;
+  justify-content:center;
+  gap:40px;
+  margin-top:20px;
+}
+
+.arrow{
+  font-size:30px;
+  cursor:pointer;
+  user-select:none;
+  transition:0.2s;
+}
+
+.arrow:hover{
+  transform:scale(1.2);
+  color:#00e5ff;
+}
+
+/* BUTTON */
+button{
+  margin-top:30px;
+  padding:10px 20px;
+  background:#ffcc00;
+  border:none;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* RESULT */
+.result{
+  margin-top:20px;
+  font-size:18px;
+}
+
+/* FLASH */
+.flash{
+  animation:flash 0.2s;
+}
+
+@keyframes flash{
+  0%{opacity:0.3;}
+  100%{opacity:1;}
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>CHOOSE YOUR SUMMER ITEM ☀️</h1>
+
+<div class="box" id="icon">🕶️</div>
+<div class="name" id="name">SUNGLASSES</div>
+
+<div class="arrows">
+  <div class="arrow" onclick="prevItem()">⬅</div>
+  <div class="arrow" onclick="nextItem()">➡</div>
+</div>
+
+<button onclick="confirm()">CONFIRM</button>
+
+<div class="result" id="result"></div>
+
+<script>
+
+let items = [
+  {icon:"🕶️", name:"SUNGLASSES"},
+  {icon:"🍦", name:"ICE CREAM"},
+  {icon:"🏖️", name:"BEACH BALL"},
+  {icon:"🌊", name:"OCEAN WAVES"}
+];
+
+let index = 0;
+let selected = null;
+
+/* update screen */
+function update(){
+  document.getElementById("icon").innerText = items[index].icon;
+  document.getElementById("name").innerText = items[index].name;
+}
+
+/* arrows */
+function nextItem(){
+  index = (index + 1) % items.length;
+  update();
+}
+
+function prevItem(){
+  index = (index - 1 + items.length) % items.length;
+  update();
+}
+
+/* confirm */
+function confirm(){
+
+  selected = items[index].name;
+
+  let id = "PLAYER_" + Math.floor(Math.random()*9999);
+
+  document.getElementById("result").innerHTML =
+  "✔ ITEM SELECTED: <b>" + selected + "</b><br>" +
+  "🎮 PLAYER ID: " + id + "<br><br>" +
+  "⚡ MISSION STARTING SOON...";
+
+  document.body.classList.add("flash");
+  setTimeout(()=>document.body.classList.remove("flash"),200);
+}
+
+</script>
+
+</body>
+</html>
