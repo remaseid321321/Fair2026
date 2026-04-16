@@ -600,7 +600,11 @@
       transition: transform .08s ease;
     }
 
-    .catch-object:hover { transform: scale(1.08); }
+    @media (hover: hover) and (pointer: fine) {
+  .catch-object:hover {
+    transform: scale(1.08);
+  }
+}
 
     .result-card {
       display: grid;
@@ -1312,13 +1316,15 @@
       obj.style.top = '-10px';
       el.catchArea.appendChild(obj);
 
-      obj.addEventListener('click', () => {
-        catchHits += 1;
-        score += 10;
-        el.catchHits.textContent = catchHits;
-        updateHud();
-        obj.remove();
-      });
+      obj.addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  catchHits += 1;
+  score += 10;
+  el.catchHits.textContent = catchHits;
+  updateHud();
+  playCatchSound();
+  obj.remove();
+}, { once: true });
 
       const fall = setInterval(() => {
         if (!obj.isConnected) {
