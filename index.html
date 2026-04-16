@@ -1074,10 +1074,10 @@
 
   <script>
     const items = [
-      { icon: '🕶️', name: 'Sun Glasses', tag: 'Cool', desc: 'Bright shield.', preview: 'Cool shield for mission 1.', cool: 8, fun: 6, chill: 9 },
-      { icon: '🍦', name: 'Ice Cream', tag: 'Sweet', desc: 'Quick boost.', preview: 'Sweet boost for mission 1.', cool: 6, fun: 10, chill: 8 },
-      { icon: '🏖️', name: 'Beach Ball', tag: 'Fun', desc: 'Party pick.', preview: 'High fun for mission 1.', cool: 7, fun: 9, chill: 5 },
-      { icon: '🌊', name: 'Ocean Waves', tag: 'Chill', desc: 'Calm flow.', preview: 'Smooth mood for mission 1.', cool: 5, fun: 7, chill: 10 }
+      { icon: '🕶️', name: 'Sun Glasses', tag: 'Cool', desc: 'Bright shield.', preview: '20260510 → 10 / 05 → summer starts with a clue.', cool: 8, fun: 6, chill: 9 },
+      { icon: '🍦', name: 'Ice Cream', tag: 'Sweet', desc: 'Quick boost.', preview: '05 + 10 = a date. Why does summer keep pointing there?', cool: 6, fun: 10, chill: 8 },
+      { icon: '🏖️', name: 'Beach Ball', tag: 'Fun', desc: 'Party pick.', preview: 'A beach game, a bright day, and a hidden code: 20260510.', cool: 7, fun: 9, chill: 5 },
+      { icon: '🌊', name: 'Ocean Waves', tag: 'Chill', desc: 'Calm flow.',preview: 'Waves, sun, sand... and one date that keeps returning.', cool: 5, fun: 7, chill: 10 }
     ];
 
     const catchIcons = ['🍦','🏖️','🌊','🌴','🕶️','🐚'];
@@ -1230,7 +1230,6 @@
       if (!started || confirmed) return;
       if (direction === 'right') index = (index + 1) % items.length;
       else index = (index - 1 + items.length) % items.length;
-      score += 2;
       updateSelectionView();
     }
 
@@ -1243,28 +1242,27 @@
     }
 
     function startMissionCountdown() {
-      let count = 3;
-      clearInterval(countdownTimer);
-      el.countdown.textContent = count;
-      el.dialogText.textContent = 'Mission 1 starting soon...';
-      flashScreen();
+  let count = 3;
+  clearInterval(countdownTimer);
 
-      countdownTimer = setInterval(() => {
-        count -= 1;
-        if (count > 0) {
-          el.countdown.textContent = count;
-          el.dialogText.textContent = 'Mission 1 starting soon...';
-          flashScreen();
-        } else if (count === 0) {
-          el.countdown.textContent = 'GO';
-          el.dialogText.textContent = 'Mission 1 start';
-          flashScreen();
-        } else {
-          clearInterval(countdownTimer);
-          openCatchGame();
-        }
-      }, 850);
+  el.dialogText.textContent = 'Mission 1 starting soon... ' + count;
+  flashScreen();
+
+  countdownTimer = setInterval(() => {
+    count -= 1;
+
+    if (count > 0) {
+      el.dialogText.textContent = 'Mission 1 starting soon... ' + count;
+      flashScreen();
+    } else if (count === 0) {
+      el.dialogText.textContent = 'Mission 1 start';
+      flashScreen();
+    } else {
+      clearInterval(countdownTimer);
+      openCatchGame();
     }
+  }, 850);
+}
 
     function confirmSelection() {
       if (!started || confirmed) return;
@@ -1364,7 +1362,6 @@
       el.resultScreen.classList.add('hidden');
       el.selectScreen.classList.remove('hidden');
       el.hud.classList.remove('hidden');
-      el.countdown.textContent = '--';
       updateSelectionView();
     }
 
@@ -1378,7 +1375,6 @@
       confirmed = false;
       playerId = generatePlayerId();
       el.playerId.textContent = playerId;
-      el.countdown.textContent = '--';
       updateHud();
       updateSelectionView();
 
@@ -1440,6 +1436,22 @@
       }
     }
 
+    function updateExpoCountdown() {
+  const target = new Date('2026-05-10T00:00:00').getTime();
+  const now = new Date().getTime();
+  const diff = target - now;
+
+  if (diff <= 0) {
+    el.countdown.textContent = '00d 00h 00m';
+    return;
+  }
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+
+  el.countdown.textContent = `${days}d ${hours}h ${minutes}m`;
+}
     el.startBtn.addEventListener('click', goToSelection);
     el.leftBtn.addEventListener('click', () => move('left'));
     el.rightBtn.addEventListener('click', () => move('right'));
@@ -1449,8 +1461,10 @@
     el.backToStartBtn.addEventListener('click', () => resetGame(true));
     document.addEventListener('keydown', handleKeydown);
 
-    initAmbientEffects();
-    resetGame(true);
+   initAmbientEffects();
+updateExpoCountdown();
+setInterval(updateExpoCountdown, 60000);
+resetGame(true);
   </script>
 </body>
 </html>
