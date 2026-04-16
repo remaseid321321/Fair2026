@@ -1295,7 +1295,7 @@
 
       catchSpawner = setInterval(() => {
         spawnCatchObject();
-      }, 380);
+      }, 400);
 
       catchTimer = setInterval(() => {
         timeLeft -= 1;
@@ -1325,7 +1325,7 @@
           clearInterval(fall);
           return;
         }
-        obj.style.top = (obj.offsetTop + 8) + 'px';
+        obj.style.top = (obj.offsetTop + 7) + 'px';
         if (obj.offsetTop > el.catchArea.clientHeight) {
           obj.remove();
           clearInterval(fall);
