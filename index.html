@@ -1,1685 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Summer Arcade</title>
-  <style>
-    :root {
-      --bg-deep: #081826;
-      --sky-top: #73d4ff;
-      --sky-bottom: #dff7ff;
-      --sea: #0a72b5;
-      --sea-dark: #084f86;
-      --sand: #f8ddb0;
-      --sun: #ffd84d;
-      --panel: #f8f2ff;
-      --panel-border: #1b1734;
-      --text-dark: #181228;
-      --accent: #ff4fa3;
-      --accent-2: #3ff2ff;
-      --accent-3: #98ff66;
-      --warning: #ffcf3c;
-      --danger: #ff6a6a;
-      --white: #ffffff;
-      --shadow: rgba(0, 0, 0, 0.24);
-      --pixel-border: 4px solid #1b1734;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html, body {
-      margin: 0;
-      min-height: 100%;
-      background: var(--bg-deep);
-      font-family: "Courier New", monospace;
-      color: var(--white);
-      overflow: hidden;
-    }
-
-    body {
-      position: relative;
-    }
-
-    button {
-      font: inherit;
-    }
-
-    .game {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      background: linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-bottom) 48%, var(--sea) 49%, var(--sea-dark) 100%);
-    }
-
-    /* Background */
-    .sun {
-      position: absolute;
-      top: 42px;
-      right: 60px;
-      width: 96px;
-      height: 96px;
-      border-radius: 50%;
-      background: var(--sun);
-      box-shadow: 0 0 20px rgba(255, 216, 77, 0.8), 0 0 48px rgba(255, 216, 77, 0.55);
-      animation: sunPulse 3s ease-in-out infinite;
-    }
-
-    .sea {
-      position: absolute;
-      inset: 50% 0 0 0;
-      overflow: hidden;
-    }
-
-    .wave {
-      position: absolute;
-      left: -20%;
-      width: 140%;
-      height: 38px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      animation: waveMove linear infinite;
-    }
-
-    .wave.w1 { top: 10px; animation-duration: 8s; }
-    .wave.w2 { top: 34px; opacity: 0.55; animation-duration: 11s; }
-    .wave.w3 { top: 60px; opacity: 0.35; animation-duration: 14s; }
-
-    .sand {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 120px;
-      background: linear-gradient(to bottom, #f5d39d, var(--sand));
-      border-top: 5px solid rgba(255,255,255,0.4);
-    }
-
-    .palm {
-      position: absolute;
-      bottom: 102px;
-      left: 38px;
-      font-size: 92px;
-      filter: drop-shadow(0 8px 0 rgba(0, 0, 0, 0.18));
-      animation: sway 3.8s ease-in-out infinite;
-      transform-origin: bottom center;
-    }
-
-    .island {
-      position: absolute;
-      bottom: 122px;
-      right: 140px;
-      font-size: 58px;
-      animation: float 4.2s ease-in-out infinite;
-      filter: drop-shadow(0 10px 0 rgba(0,0,0,0.12));
-    }
-
-    .shell, .sparkle, .bubble {
-      position: absolute;
-      user-select: none;
-      pointer-events: none;
-    }
-
-    .shell {
-      bottom: 100px;
-      font-size: 24px;
-      opacity: 0.75;
-      animation: shellBob 6s ease-in-out infinite;
-    }
-
-    .shell.s1 { left: 20%; animation-delay: 0s; }
-    .shell.s2 { left: 52%; animation-delay: 1s; }
-    .shell.s3 { left: 78%; animation-delay: 2s; }
-
-    .sparkle {
-      top: 0;
-      font-size: 16px;
-      opacity: 0.55;
-      animation: sparkleFloat linear infinite;
-    }
-
-    .bubble {
-      bottom: 90px;
-      font-size: 15px;
-      opacity: 0.4;
-      animation: bubbleRise linear infinite;
-    }
-
-    .scanlines {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: repeating-linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.05),
-        rgba(0, 0, 0, 0.05) 1px,
-        transparent 1px,
-        transparent 4px
-      );
-      mix-blend-mode: multiply;
-      z-index: 50;
-    }
-
-    .crt {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: radial-gradient(circle at center, transparent 58%, rgba(0, 0, 0, 0.22) 100%);
-      z-index: 49;
-    }
-
-    .flicker {
-      animation: flicker 6s infinite;
-    }
-
-    /* Layout */
-    .hud {
-      position: absolute;
-      top: 18px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: min(980px, calc(100vw - 24px));
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 10px;
-      z-index: 10;
-    }
-
-    .hud-box, .panel, .command-btn, .dialog-box, .start-card, .result-card, .secret-banner {
-      border: var(--pixel-border);
-      box-shadow: 0 8px 0 var(--shadow);
-    }
-
-    .hud-box {
-      background: rgba(17, 13, 35, 0.84);
-      padding: 10px 12px;
-      min-height: 62px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 3px;
-    }
-
-    .hud-label {
-      font-size: 11px;
-      color: #cbe9ff;
-      letter-spacing: 1px;
-    }
-
-    .hud-value {
-      font-size: 20px;
-      color: var(--warning);
-      font-weight: bold;
-      text-transform: uppercase;
-      text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
-    }
-
-    .screen {
-      position: absolute;
-      inset: 92px 14px 16px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 5;
-      min-height: 0;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    /* Start Screen */
-    .start-screen, .result-screen {
-      width: min(860px, 92vw);
-      max-height: 82vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .start-card, .result-card {
-      width: 100%;
-      background: rgba(15, 10, 32, 0.9);
-      padding: 28px;
-      text-align: center;
-      color: var(--white);
-      position: relative;
-    }
-
-    .title {
-      font-size: clamp(32px, 5vw, 60px);
-      line-height: 1;
-      margin: 0 0 12px;
-      color: var(--warning);
-      text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.28);
-      letter-spacing: 2px;
-    }
-
-    .subtitle {
-      margin: 0 auto 20px;
-      max-width: 620px;
-      color: #e6f8ff;
-      line-height: 1.65;
-      font-size: 14px;
-    }
-
-    .blinking {
-      display: inline-block;
-      color: var(--accent-2);
-      font-size: 22px;
-      margin: 18px 0 8px;
-      animation: blink 1s step-start infinite;
-    }
-
-    .start-help {
-      margin-top: 16px;
-      font-size: 13px;
-      color: #d1dbff;
-      line-height: 1.7;
-    }
-
-    .mini-icons {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      margin-top: 18px;
-      font-size: 34px;
-    }
-
-    /* Selection Screen */
-    .select-screen {
-      width: min(980px, 100%);
-      height: min(660px, calc(100vh - 118px));
-      display: grid;
-      grid-template-columns: 1.25fr 0.9fr;
-      gap: 14px;
-      align-items: stretch;
-    }
-
-    .panel {
-      background: rgba(248, 242, 255, 0.92);
-      color: var(--text-dark);
-      padding: 14px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .select-stage {
-      display: grid;
-      grid-template-rows: auto minmax(0, 1fr) auto;
-      gap: 10px;
-      min-height: 0;
-    }
-
-    .panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      font-size: 13px;
-      text-transform: uppercase;
-      color: #3e3463;
-      letter-spacing: 1px;
-    }
-
-    .status-pill {
-      border: 3px solid #241f44;
-      padding: 4px 8px;
-      background: #fff9cf;
-      font-size: 11px;
-      font-weight: bold;
-    }
-
-    .carousel {
-      display: grid;
-      grid-template-columns: 92px 1fr 92px;
-      align-items: center;
-      gap: 10px;
-      min-height: 0;
-    }
-
-    .side-card,
-    .main-card {
-      height: 280px;
-      padding: 14px;
-      transition: transform .18s ease;
-      box-shadow: inset 0 0 0 4px rgba(255,255,255,0.45), 0 8px 0 rgba(0,0,0,0.12);
-    }
-
-    .side-card {
-      height: 210px;
-      opacity: 0.28;
-      transform: scale(0.88);
-      transition: transform .25s ease, opacity .25s ease;
-      filter: saturate(0.7);
-      border-color: rgba(27, 23, 52, 0.28);
-      background: rgba(255,255,255,0.25);
-      box-shadow: none;
-    }
-
-    .main-card {
-      height: 380px;
-      padding: 18px;
-      transition: transform .18s ease;
-      box-shadow: inset 0 0 0 4px rgba(255,255,255,0.5), 0 10px 0 rgba(0,0,0,0.15);
-    }
-
-    .main-card.pop {
-      animation: popCard 0.22s ease;
-    }
-
-    .icon {
-      line-height: 1;
-      user-select: none;
-      filter: drop-shadow(0 8px 0 rgba(0,0,0,0.12));
-    }
-
-    .side-card .icon {
-      font-size: 44px;
-    }
-
-    .main-card .icon {
-      font-size: clamp(56px, 8vw, 84px);
-      animation: bob 2.2s ease-in-out infinite;
-    }
-
-    .item-name {
-      margin-top: 10px;
-      font-size: clamp(16px, 1.9vw, 22px);
-      letter-spacing: 1.5px;
-      text-align: center;
-      font-weight: bold;
-    }
-
-    .item-tag {
-      margin-top: 8px;
-      display: inline-block;
-      font-size: 10px;
-      padding: 4px 8px;
-      border: 3px solid #2a2454;
-      background: #e4fbff;
-      text-transform: uppercase;
-      font-weight: bold;
-    }
-
-    .item-desc {
-      margin-top: 10px;
-      max-width: 360px;
-      text-align: center;
-      line-height: 1.4;
-      font-size: 11px;
-      color: #443a6a;
-      min-height: 30px;
-    }
-
-    .stats {
-      margin-top: 10px;
-      width: min(100%, 320px);
-      display: grid;
-      gap: 6px;
-    }
-
-    .stat {
-      display: grid;
-      grid-template-columns: 54px 1fr 28px;
-      align-items: center;
-      gap: 8px;
-      font-size: 11px;
-      font-weight: bold;
-      color: #3f3567;
-    }
-
-    .bar {
-      position: relative;
-      height: 12px;
-      border: 3px solid #241f44;
-      background: #fff;
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      position: absolute;
-      inset: 0 auto 0 0;
-      width: 0;
-      background: linear-gradient(90deg, var(--accent-2), var(--accent-3));
-      transition: width .35s ease;
-    }
-
-    .commands {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-
-    .command-btn {
-      min-height: 56px;
-      background: #1f1940;
-      color: var(--white);
-      padding: 10px 12px;
-      text-align: left;
-      cursor: pointer;
-      transition: transform .12s ease, background .2s ease;
-    }
-
-    .command-btn:hover,
-    .command-btn.active {
-      background: #362b69;
-      transform: translateY(-2px);
-    }
-
-    .command-btn strong {
-      display: block;
-      color: var(--warning);
-      font-size: 15px;
-      margin-bottom: 4px;
-    }
-
-    .command-btn span {
-      font-size: 10px;
-      line-height: 1.35;
-      color: #dfedff;
-    }
-
-    .side-panel {
-      display: grid;
-      grid-template-rows: auto auto 1fr;
-      gap: 12px;
-    }
-
-    .mini-panel-title {
-      font-size: 14px;
-      font-weight: bold;
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      color: #382f62;
-    }
-
-    .dots {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .dot {
-      width: 18px;
-      height: 18px;
-      border: 3px solid #1d1736;
-      background: #fff;
-    }
-
-    .dot.active {
-      background: var(--accent);
-      box-shadow: 0 0 0 3px rgba(255, 79, 163, 0.18);
-    }
-
-    .small-note {
-      margin-top: 10px;
-      font-size: 12px;
-      color: #4f4674;
-      line-height: 1.7;
-    }
-
-    .dialog-box {
-      background: #171233;
-      color: #f2f5ff;
-      padding: 14px;
-      min-height: 150px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .dialog-title {
-      color: var(--warning);
-      font-size: 15px;
-      text-transform: uppercase;
-    }
-
-    .dialog-text {
-      min-height: 54px;
-      line-height: 1.6;
-      font-size: 12px;
-      color: #ebf3ff;
-    }
-
-    .player-box {
-      border: 3px solid rgba(255,255,255,0.18);
-      padding: 10px;
-      background: rgba(255,255,255,0.04);
-      display: grid;
-      gap: 4px;
-      font-size: 12px;
-      color: #d8f4ff;
-    }
-
-    .label-value {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .countdown {
-      font-size: 32px;
-      color: var(--accent-2);
-      text-shadow: 2px 2px 0 rgba(0,0,0,0.25);
-      min-height: 40px;
-    }
-
-    .result-card {
-      color: var(--white);
-      background: rgba(15, 10, 32, 0.94);
-      display: grid;
-      gap: 14px;
-    }
-
-    .result-top {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-
-    .result-icon {
-      font-size: 92px;
-      line-height: 1;
-      animation: bob 2.2s ease-in-out infinite;
-    }
-
-    .result-main-title {
-      font-size: clamp(24px, 4vw, 40px);
-      color: var(--warning);
-      letter-spacing: 2px;
-      margin: 0;
-    }
-
-    .result-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(220px, 1fr));
-      gap: 12px;
-      margin-top: 8px;
-    }
-
-    .result-box {
-      border: var(--pixel-border);
-      padding: 14px;
-      background: rgba(255,255,255,0.06);
-      text-align: left;
-      min-height: 84px;
-    }
-
-    .result-box small {
-      display: block;
-      color: #b9dbff;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      font-size: 11px;
-    }
-
-    .result-box strong {
-      font-size: 18px;
-      color: #fff7c8;
-      line-height: 1.4;
-      text-transform: uppercase;
-    }
-
-    .result-actions {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 6px;
-    }
-
-    .result-btn {
-      min-width: 180px;
-      border: var(--pixel-border);
-      padding: 14px 16px;
-      cursor: pointer;
-      background: #2f255a;
-      color: var(--white);
-      font-weight: bold;
-      text-transform: uppercase;
-      transition: transform .12s ease, background .2s ease;
-    }
-
-    .result-btn:hover {
-      transform: translateY(-2px);
-      background: #473781;
-    }
-
-    .result-btn.primary {
-      background: #007f9c;
-    }
-
-    .result-btn.primary:hover {
-      background: #0997b9;
-    }
-
-    .secret-banner {
-      position: absolute;
-      left: 50%;
-      bottom: 20px;
-      transform: translateX(-50%);
-      background: #160f31;
-      color: var(--warning);
-      padding: 12px 16px;
-      z-index: 40;
-      font-size: 14px;
-      text-transform: uppercase;
-      animation: slideUp .4s ease;
-    }
-
-    .flash-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(255,255,255,0.75);
-      opacity: 0;
-      pointer-events: none;
-      z-index: 60;
-    }
-
-    .flash-overlay.show {
-      animation: flashScreen .28s ease;
-    }
-
-    .toast {
-      position: absolute;
-      top: 96px;
-      right: 20px;
-      z-index: 40;
-      background: #171233;
-      border: var(--pixel-border);
-      color: #fff;
-      padding: 12px 14px;
-      font-size: 13px;
-      box-shadow: 0 8px 0 var(--shadow);
-      animation: slideIn .32s ease;
-    }
-
-    @media (max-width: 980px) {
-      .hud {
-        grid-template-columns: repeat(3, 1fr);
-        width: calc(100vw - 20px);
-      }
-
-      .screen {
-        inset: 130px 10px 12px 10px;
-      }
-
-      .select-screen {
-        grid-template-columns: 1fr;
-        height: auto;
-        max-height: calc(100vh - 148px);
-        overflow: auto;
-      }
-
-      .side-panel {
-        grid-template-rows: auto auto auto;
-      }
-    }
-
-    @media (max-width: 640px) {
-      html, body {
-        overflow: auto;
-      }
-
-      .game {
-        min-height: 100dvh;
-        height: auto;
-        overflow: auto;
-      }
-
-      .hud {
-        position: relative;
-        left: auto;
-        transform: none;
-        top: auto;
-        width: calc(100vw - 16px);
-        margin: 8px auto 0;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-      }
-
-      .hud-box {
-        min-height: 52px;
-        padding: 8px 10px;
-      }
-
-      .hud-value {
-        font-size: 15px;
-      }
-
-      .screen {
-        position: relative;
-        inset: auto;
-        padding: 10px 8px 16px;
-        min-height: auto;
-        align-items: flex-start;
-      }
-
-      .start-screen,
-      .result-screen,
-      .select-screen {
-        width: 100%;
-      }
-
-      .select-screen {
-        grid-template-columns: 1fr;
-        height: auto;
-        max-height: none;
-        overflow: visible;
-      }
-
-      .carousel {
-        grid-template-columns: 56px 1fr 56px;
-        gap: 8px;
-      }
-
-      .side-card {
-        height: 120px;
-      }
-
-      .side-card .icon {
-        font-size: 28px;
-      }
-
-      .main-card {
-        height: auto;
-        min-height: 236px;
-        padding: 12px 8px;
-      }
-
-      .main-card .icon {
-        font-size: 54px;
-      }
-
-      .item-name {
-        font-size: 15px;
-      }
-
-      .item-desc {
-        font-size: 10px;
-        max-width: 240px;
-      }
-
-      .stats {
-        width: 100%;
-      }
-
-      .commands {
-        grid-template-columns: 1fr;
-      }
-
-      .result-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .result-btn {
-        min-width: 100%;
-      }
-
-      .toast {
-        left: 8px;
-        right: 8px;
-        top: auto;
-        bottom: 8px;
-      }
-
-      .secret-banner {
-        width: calc(100vw - 16px);
-        text-align: center;
-      }
-    }
-
-    /* Animations */
-    @keyframes waveMove {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(18%); }
-    }
-
-    @keyframes sunPulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.06); }
-    }
-
-    @keyframes sway {
-      0%,100% { transform: rotate(-3deg); }
-      50% { transform: rotate(3deg); }
-    }
-
-    @keyframes float {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    @keyframes shellBob {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-7px); }
-    }
-
-    @keyframes sparkleFloat {
-      0% { transform: translateY(0); opacity: 0; }
-      15% { opacity: 0.55; }
-      100% { transform: translateY(-180px); opacity: 0; }
-    }
-
-    @keyframes bubbleRise {
-      0% { transform: translateY(0) scale(0.8); opacity: 0; }
-      20% { opacity: 0.35; }
-      100% { transform: translateY(-220px) scale(1.08); opacity: 0; }
-    }
-
-    @keyframes flicker {
-      0%, 97%, 100% { opacity: 1; }
-      98% { opacity: 0.94; }
-      99% { opacity: 0.98; }
-    }
-
-    @keyframes blink {
-      50% { opacity: 0; }
-    }
-
-    @keyframes bob {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    @keyframes popCard {
-      0% { transform: scale(0.96); }
-      65% { transform: scale(1.03); }
-      100% { transform: scale(1); }
-    }
-
-    @keyframes flashScreen {
-      0% { opacity: 0; }
-      35% { opacity: 1; }
-      100% { opacity: 0; }
-    }
-
-    @keyframes slideIn {
-      from { transform: translateX(30px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-
-    @keyframes slideUp {
-      from { transform: translate(-50%, 24px); opacity: 0; }
-      to { transform: translate(-50%, 0); opacity: 1; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Summer Arcade</title>
+
+<style>
+body{
+  margin:0;
+  font-family: monospace;
+  background:#cfefff;
+  text-align:center;
+  overflow:hidden;
+}
+
+/* SIMPLE HUD (NO BOXES) */
+.hud{
+  display:flex;
+  justify-content:space-around;
+  padding:10px;
+  font-weight:bold;
+}
+
+/* MAIN CARD */
+.card{
+  margin:20px auto;
+  width:260px;
+  padding:20px;
+  border:4px solid black;
+  background:white;
+}
+
+.icon{
+  font-size:70px;
+}
+
+.name{
+  margin-top:10px;
+  font-size:18px;
+}
+
+.desc{
+  font-size:12px;
+  margin-top:10px;
+}
+
+/* SIDE ICONS */
+.side{
+  opacity:0.3;
+  font-size:40px;
+}
+
+.row{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:20px;
+}
+
+/* BUTTONS */
+.buttons{
+  margin-top:20px;
+}
+
+button{
+  padding:10px;
+  margin:5px;
+  border:3px solid black;
+  background:#fff;
+  cursor:pointer;
+}
+
+/* GAME */
+#game{
+  display:none;
+  height:100vh;
+}
+
+#gameArea{
+  position:relative;
+  width:100%;
+  height:80vh;
+  overflow:hidden;
+}
+
+/* RESULT */
+#result{
+  display:none;
+  margin-top:40px;
+  font-size:20px;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  .card{width:90%;}
+}
+</style>
 </head>
+
 <body>
-  <div class="game flicker" id="game">
-    <div class="sun"></div>
-    <div class="sea">
-      <div class="wave w1"></div>
-      <div class="wave w2"></div>
-      <div class="wave w3"></div>
-    </div>
-    <div class="sand"></div>
-    <div class="palm">🌴</div>
-    <div class="island">🏝️</div>
-    <div class="shell s1">🐚</div>
-    <div class="shell s2">🐚</div>
-    <div class="shell s3">🐚</div>
 
-    <div class="hud hidden" id="hud">
-      <div class="hud-box">
-        <div class="hud-label">Player</div>
-        <div class="hud-value" id="hudPlayer">Guest</div>
-      </div>
-      <div class="hud-box">
-        <div class="hud-label">Score</div>
-        <div class="hud-value" id="hudScore">000</div>
-      </div>
-      <div class="hud-box">
-        <div class="hud-label">Level</div>
-        <div class="hud-value" id="hudLevel">01</div>
-      </div>
-      <div class="hud-box">
-        <div class="hud-label">Status</div>
-        <div class="hud-value" id="hudStatus">Ready</div>
-      </div>
-      <div class="hud-box">
-        <div class="hud-label">Expo In</div>
-        <div class="hud-value" id="expoCountdown">--</div>
-      </div>
-    </div>
+<div class="hud">
+  <div id="player">P-0000</div>
+  <div id="score">000</div>
+  <div id="status">READY</div>
+</div>
 
-    <div class="screen">
-      <section class="start-screen" id="startScreen">
-        <div class="start-card">
-          <h1 class="title">SUMMER ARCADE</h1>
-          <p class="subtitle">
-            Enter a retro summer selection screen, choose your item, charge your vibe, and launch your mini mission.
-            Use the keyboard or buttons to make it feel like a real arcade game.
-          </p>
-          <div class="mini-icons">
-            <span>🕶️</span>
-            <span>🍦</span>
-            <span>🏖️</span>
-            <span>🌊</span>
-          </div>
-          <div class="blinking">PRESS ENTER OR CLICK START</div>
-          <div class="small-note" id="startCountdownText" style="color:#9fefff; margin-top:10px;">EXPO COUNTDOWN: --</div>
-          <div class="result-actions">
-            <button class="result-btn primary" id="startBtn">Start Game</button>
-          </div>
-          <div class="start-help">
-            Controls: ← → to move • Enter to confirm • P to preview • R to restart<br>
-            Secret: try pressing the same direction 3 times in a row...
-          </div>
-        </div>
-      </section>
+<div class="row">
+  <div class="side" id="prev">🌊</div>
 
-      <section class="select-screen hidden" id="selectScreen">
-        <div class="panel select-stage">
-          <div class="panel-header">
-            <span>Summer Item Select</span>
-            <span class="status-pill" id="selectState">Selection Mode</span>
-          </div>
-
-          <div class="carousel">
-            <div class="side-card" id="prevCard">
-              <div class="icon" id="prevIcon">🍦</div>
-            </div>
-
-            <div class="main-card" id="mainCard">
-              <div class="icon" id="mainIcon">🕶️</div>
-              <div class="item-name" id="mainName">Sun Glasses</div>
-              <div class="item-tag" id="mainTag">Cool Shield</div>
-              <div class="item-desc" id="mainDesc">Blocks the sun and boosts your arcade confidence.</div>
-              <div class="stats">
-                <div class="stat">
-                  <span>Cool</span>
-                  <div class="bar"><div class="bar-fill" id="coolBar"></div></div>
-                  <span id="coolVal">8</span>
-                </div>
-                <div class="stat">
-                  <span>Fun</span>
-                  <div class="bar"><div class="bar-fill" id="funBar"></div></div>
-                  <span id="funVal">6</span>
-                </div>
-                <div class="stat">
-                  <span>Chill</span>
-                  <div class="bar"><div class="bar-fill" id="chillBar"></div></div>
-                  <span id="chillVal">9</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="side-card" id="nextCard">
-              <div class="icon" id="nextIcon">🏖️</div>
-            </div>
-          </div>
-
-          <div class="commands">
-            <button class="command-btn" id="leftBtn">
-              <strong>◀ LEFT</strong>
-              <span>Move to the previous item.</span>
-            </button>
-            <button class="command-btn" id="rightBtn">
-              <strong>RIGHT ▶</strong>
-              <span>Move to the next item.</span>
-            </button>
-            <button class="command-btn" id="previewBtn">
-              <strong>ITEM INFO</strong>
-              <span>Shows a clearer description of the selected item and gives a small bonus.</span>
-            </button>
-            <button class="command-btn" id="confirmBtn">
-              <strong>CONFIRM</strong>
-              <span>Lock your item and launch the mission countdown.</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="side-panel">
-          <div class="panel">
-            <div class="mini-panel-title">Item Progress</div>
-            <div class="dots" id="dots"></div>
-            <div class="small-note" id="itemCounter">Item 1 / 4</div>
-          </div>
-
-          <div class="panel">
-            <div class="mini-panel-title">Item Info</div>
-            <div class="small-note" id="previewText">
-              This box explains what the selected item does inside the game screen.
-            </div>
-          </div>
-
-          <div class="dialog-box">
-            <div>
-              <div class="dialog-title">Mission Console</div>
-              <div class="dialog-text" id="dialogText">
-                Use LEFT and RIGHT to browse your summer loadout.
-              </div>
-              <div class="small-note hidden" id="missionHint" style="color:#9fefff; margin-top:6px;">
-                Mission starting soon...
-              </div>
-            </div>
-            <div class="player-box">
-              <div class="label-value"><span>PLAYER ID</span><strong id="playerId">P-0000</strong></div>
-              <div class="label-value"><span>RANK</span><strong id="playerRank">Beach Rookie</strong></div>
-              <div class="label-value"><span>COUNTDOWN</span><strong class="countdown" id="countdown">--</strong></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- MINI GAME SCREEN -->
-      <section class="hidden" id="gameScreen" style="width:100%;height:100%;position:relative;">
-        <div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);font-size:18px;color:#fff;">CATCH GAME • TAP ITEMS!</div>
-        <div id="gameArea" style="position:absolute;inset:60px 10px 10px 10px;border:4px solid #111;background:rgba(0,0,0,0.2);overflow:hidden;"></div>
-      </section>
-
-      <section class="result-screen hidden" id="resultScreen">
-        <div class="result-card">
-          <div class="result-top">
-            <div class="result-icon" id="resultIcon">🕶️</div>
-            <div>
-              <h2 class="result-main-title">MISSION READY</h2>
-              <div id="resultSubtitle">Your summer loadout has been locked in.</div>
-            </div>
-          </div>
-
-          <div class="result-grid">
-            <div class="result-box">
-              <small>Selected Item</small>
-              <strong id="resultItem">Sun Glasses</strong>
-            </div>
-            <div class="result-box">
-              <small>Player ID</small>
-              <strong id="resultPlayer">P-0000</strong>
-            </div>
-            <div class="result-box">
-              <small>Final Score</small>
-              <strong id="resultScore">000</strong>
-            </div>
-            <div class="result-box">
-              <small>Summer Rank</small>
-              <strong id="resultRank">Beach Rookie</strong>
-            </div>
-          </div>
-
-          <div class="result-actions">
-            <button class="result-btn primary" id="playAgainBtn">Play Again</button>
-            <button class="result-btn" id="backToStartBtn">Back To Start</button>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <div class="flash-overlay" id="flash"></div>
-    <div class="scanlines"></div>
-    <div class="crt"></div>
+  <div class="card">
+    <div class="icon" id="icon">🕶️</div>
+    <div class="name" id="name">SUN GLASSES</div>
+    <div class="desc" id="desc">Cool defensive item</div>
   </div>
 
-  <script>
-    const items = [
-      {
-        icon: '🕶️',
-        name: 'Sun Glasses',
-        tag: 'Cool Shield',
-        desc: 'Blocks the sun and boosts your arcade confidence.',
-        preview: 'A stylish defensive item. Good for blocking the sun and starting the mission with a cool vibe.',
-        cool: 8,
-        fun: 6,
-        chill: 9
-      },
-      {
-        icon: '🍦',
-        name: 'Ice Cream',
-        tag: 'Sweet Boost',
-        desc: 'Instant happiness with bonus summer energy.',
-        preview: 'A fun summer item that adds energy, sweetness, and a playful mood to your mission.',
-        cool: 6,
-        fun: 10,
-        chill: 8
-      },
-      {
-        icon: '🏖️',
-        name: 'Beach Ball',
-        tag: 'Party Mode',
-        desc: 'A playful pick for high-energy summer chaos.',
-        preview: 'A high-energy item for movement, fun, and a more playful arcade feeling.',
-        cool: 7,
-        fun: 9,
-        chill: 5
-      },
-      {
-        icon: '🌊',
-        name: 'Ocean Waves',
-        tag: 'Calm Flow',
-        desc: 'Smooth, refreshing, and perfect for relaxed players.',
-        preview: 'A calm relaxing choice that gives the screen a smooth ocean mood.',
-        cool: 5,
-        fun: 7,
-        chill: 10
-      },
-      {
-        icon: '🌴',
-        name: 'Palm Escape',
-        tag: 'Island Mode',
-        desc: 'A hidden tropical vibe for players who notice patterns.',
-        preview: 'A hidden tropical reward item unlocked by discovering the secret mode.',
-        cool: 9,
-        fun: 8,
-        chill: 9,
-        secret: true
-      }
-    ];
+  <div class="side" id="next">🍦</div>
+</div>
 
-    const publicItemsCount = 4;
-    let index = 0;
-    let score = 0;
-    let started = false;
-    let confirmed = false;
-    let playerId = '';
-    let playerRank = 'Beach Rookie';
-    let lastDirection = null;
-    let directionStreak = 0;
-    let secretUnlocked = false;
-    let countdownTimer = null;
-    let toastTimer = null;
+<div class="buttons">
+  <button onclick="prevItem()">◀</button>
+  <button onclick="nextItem()">▶</button>
+  <button onclick="confirm()">CONFIRM</button>
+</div>
 
-    const ranks = [
-      'Beach Rookie',
-      'Wave Rider',
-      'Sunset Coder',
-      'Pixel Surfer',
-      'Summer Legend'
-    ];
+<!-- GAME -->
+<div id="game">
+  <h2>Tap Items!</h2>
+  <div id="gameArea"></div>
+</div>
 
-    const randomLoadingLines = [
-      'Preparing beach mission...',
-      'Loading summer mode...',
-      'Syncing arcade vibes...',
-      'Player detected. Environment stable.',
-      'Retro sunshine calibration complete.'
-    ];
+<!-- RESULT -->
+<div id="result"></div>
 
-    const el = {
-      expoCountdown: document.getElementById('expoCountdown'),
-      startCountdownText: document.getElementById('startCountdownText'),
-      hud: document.getElementById('hud'),
-      hudPlayer: document.getElementById('hudPlayer'),
-      hudScore: document.getElementById('hudScore'),
-      hudLevel: document.getElementById('hudLevel'),
-      hudStatus: document.getElementById('hudStatus'),
-      startScreen: document.getElementById('startScreen'),
-      selectScreen: document.getElementById('selectScreen'),
-      resultScreen: document.getElementById('resultScreen'),
-      startBtn: document.getElementById('startBtn'),
-      leftBtn: document.getElementById('leftBtn'),
-      rightBtn: document.getElementById('rightBtn'),
-      previewBtn: document.getElementById('previewBtn'),
-      confirmBtn: document.getElementById('confirmBtn'),
-      prevIcon: document.getElementById('prevIcon'),
-      nextIcon: document.getElementById('nextIcon'),
-      mainIcon: document.getElementById('mainIcon'),
-      mainName: document.getElementById('mainName'),
-      mainTag: document.getElementById('mainTag'),
-      mainDesc: document.getElementById('mainDesc'),
-      mainCard: document.getElementById('mainCard'),
-      coolBar: document.getElementById('coolBar'),
-      funBar: document.getElementById('funBar'),
-      chillBar: document.getElementById('chillBar'),
-      coolVal: document.getElementById('coolVal'),
-      funVal: document.getElementById('funVal'),
-      chillVal: document.getElementById('chillVal'),
-      dots: document.getElementById('dots'),
-      itemCounter: document.getElementById('itemCounter'),
-      previewText: document.getElementById('previewText'),
-      dialogText: document.getElementById('dialogText'),
-      missionHint: document.getElementById('missionHint'),
-      countdown: document.getElementById('countdown'),
-      playerId: document.getElementById('playerId'),
-      playerRank: document.getElementById('playerRank'),
-      flash: document.getElementById('flash'),
-      selectState: document.getElementById('selectState'),
-      resultIcon: document.getElementById('resultIcon'),
-      resultItem: document.getElementById('resultItem'),
-      resultPlayer: document.getElementById('resultPlayer'),
-      resultScore: document.getElementById('resultScore'),
-      resultRank: document.getElementById('resultRank'),
-      resultSubtitle: document.getElementById('resultSubtitle'),
-      playAgainBtn: document.getElementById('playAgainBtn'),
-      backToStartBtn: document.getElementById('backToStartBtn')
-    };
+<script>
+let items=[
+ {icon:"🕶️",name:"SUN GLASSES",desc:"Cool defensive item"},
+ {icon:"🍦",name:"ICE CREAM",desc:"Sweet energy boost"},
+ {icon:"🏖️",name:"BEACH BALL",desc:"Fun playful item"},
+ {icon:"🌊",name:"WAVES",desc:"Chill relaxing item"}
+];
 
-    function currentItemsList() {
-      return secretUnlocked ? items : items.slice(0, publicItemsCount);
-    }
+let i=0;
+let score=0;
+let player="P-"+Math.floor(Math.random()*9000);
 
-    function getCurrentItem() {
-      return currentItemsList()[index];
-    }
+document.getElementById("player").innerText=player;
 
-    function padScore(num) {
-      return String(num).padStart(3, '0');
-    }
+function update(){
+ document.getElementById("icon").innerText=items[i].icon;
+ document.getElementById("name").innerText=items[i].name;
+ document.getElementById("desc").innerText=items[i].desc;
+ document.getElementById("prev").innerText=items[(i-1+items.length)%items.length].icon;
+ document.getElementById("next").innerText=items[(i+1)%items.length].icon;
+}
 
-    function generatePlayerId() {
-      return 'P-' + Math.floor(1000 + Math.random() * 9000);
-    }
+function nextItem(){ i=(i+1)%items.length; update(); }
+function prevItem(){ i=(i-1+items.length)%items.length; update(); }
 
-    function calculateRank(total) {
-      if (total >= 85) return ranks[4];
-      if (total >= 60) return ranks[3];
-      if (total >= 40) return ranks[2];
-      if (total >= 20) return ranks[1];
-      return ranks[0];
-    }
+function confirm(){
+ document.getElementById("status").innerText="STARTING...";
+ setTimeout(startGame,1000);
+}
 
-    function makeDots() {
-      const list = currentItemsList();
-      el.dots.innerHTML = '';
-      list.forEach((_, i) => {
-        const dot = document.createElement('div');
-        dot.className = 'dot' + (i === index ? ' active' : '');
-        el.dots.appendChild(dot);
-      });
-    }
+function startGame(){
+ document.getElementById("game").style.display="block";
+ document.querySelector(".row").style.display="none";
+ document.querySelector(".buttons").style.display="none";
 
-    function flashScreen() {
-      el.flash.classList.remove('show');
-      void el.flash.offsetWidth;
-      el.flash.classList.add('show');
-    }
+ let area=document.getElementById("gameArea");
+ let time=6;
 
-    function showToast(message) {
-      const old = document.querySelector('.toast');
-      if (old) old.remove();
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.textContent = message;
-      document.getElementById('game').appendChild(toast);
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.remove(), 1600);
-    }
+ let spawn=setInterval(()=>{
+   let obj=document.createElement("div");
+   obj.innerText=items[i].icon;
+   obj.style.position="absolute";
+   obj.style.left=Math.random()*90+"%";
+   obj.style.top="0px";
+   obj.style.fontSize="30px";
 
-    function updateHud() {
-      el.hudScore.textContent = padScore(score);
-      el.hudPlayer.textContent = playerId || 'Guest';
-      el.hudLevel.textContent = secretUnlocked ? '02' : '01';
-      el.hudStatus.textContent = confirmed ? 'Locked' : 'Ready';
-      playerRank = calculateRank(score);
-      el.playerRank.textContent = playerRank;
-    }
+   obj.onclick=()=>{score+=10; obj.remove();}
 
-    function updateExpoCountdown() {
-      const target = new Date('2026-05-10T00:00:00');
-      const now = new Date();
-      const diff = target - now;
+   area.appendChild(obj);
 
-      if (diff <= 0) {
-        const text = 'TODAY';
-        if (el.expoCountdown) el.expoCountdown.textContent = text;
-        if (el.startCountdownText) el.startCountdownText.textContent = `EXPO COUNTDOWN: ${text}`;
-        return;
-      }
+   let fall=setInterval(()=>{
+     obj.style.top=(obj.offsetTop+5)+"px";
+     if(obj.offsetTop>area.offsetHeight){
+       obj.remove();
+       clearInterval(fall);
+     }
+   },30);
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const text = `${days}D ${hours}H`;
-      if (el.expoCountdown) el.expoCountdown.textContent = text;
-      if (el.startCountdownText) el.startCountdownText.textContent = `EXPO COUNTDOWN: ${text}`;
-    }
+ },500);
 
-    function applyTimeTheme() {
-      const hour = new Date().getHours();
-      const isDay = hour >= 6 && hour < 18;
-      const root = document.documentElement;
+ let timer=setInterval(()=>{
+   time--;
+   if(time<=0){
+     clearInterval(spawn);
+     clearInterval(timer);
+     showResult();
+   }
+ },1000);
+}
 
-      if (isDay) {
-        root.style.setProperty('--bg-deep', '#081826');
-        root.style.setProperty('--sky-top', '#73d4ff');
-        root.style.setProperty('--sky-bottom', '#dff7ff');
-        root.style.setProperty('--sea', '#0a72b5');
-        root.style.setProperty('--sea-dark', '#084f86');
-        root.style.setProperty('--sand', '#f8ddb0');
-        root.style.setProperty('--sun', '#ffd84d');
-      } else {
-        root.style.setProperty('--bg-deep', '#04101d');
-        root.style.setProperty('--sky-top', '#132243');
-        root.style.setProperty('--sky-bottom', '#29406e');
-        root.style.setProperty('--sea', '#0a3b78');
-        root.style.setProperty('--sea-dark', '#061f44');
-        root.style.setProperty('--sand', '#a79472');
-        root.style.setProperty('--sun', '#d7e3ff');
-      }
-    }
+function showResult(){
+ document.getElementById("game").style.display="none";
+ document.getElementById("result").style.display="block";
+ document.getElementById("result").innerText=
+ "STAY TUNED • MISSION START SOON • 10052026\nSCORE: "+score;
+}
 
-    function animateCard() {
-      el.mainCard.classList.remove('pop');
-      void el.mainCard.offsetWidth;
-      el.mainCard.classList.add('pop');
-    }
+update();
+</script>
 
-    function updateSelectionView() {
-      const list = currentItemsList();
-      if (index >= list.length) index = 0;
-      const current = list[index];
-      const prev = list[(index - 1 + list.length) % list.length];
-      const next = list[(index + 1) % list.length];
-
-      el.prevIcon.textContent = prev.icon;
-      el.nextIcon.textContent = next.icon;
-      el.mainIcon.textContent = current.icon;
-      el.mainName.textContent = current.name;
-      el.mainTag.textContent = current.tag;
-      el.mainDesc.textContent = current.desc;
-      el.coolVal.textContent = current.cool;
-      el.funVal.textContent = current.fun;
-      el.chillVal.textContent = current.chill;
-      el.coolBar.style.width = (current.cool * 10) + '%';
-      el.funBar.style.width = (current.fun * 10) + '%';
-      el.chillBar.style.width = (current.chill * 10) + '%';
-      el.itemCounter.textContent = `Item ${index + 1} / ${list.length}`;
-      el.previewText.textContent = current.preview;
-      el.dialogText.textContent = `Selected: ${current.name.toUpperCase()}. ${current.preview}`;
-      el.selectState.textContent = current.secret ? 'Secret Mode' : 'Selection Mode';
-      makeDots();
-      animateCard();
-      updateHud();
-    }
-
-    function addScore(amount) {
-      score += amount;
-      updateHud();
-    }
-
-    function move(direction) {
-      if (!started || confirmed) return;
-      const list = currentItemsList();
-      if (direction === 'right') {
-        index = (index + 1) % list.length;
-        addScore(4);
-        el.dialogText.textContent = `Browsing next item... ${getCurrentItem().name.toUpperCase()} detected.`;
-      } else {
-        index = (index - 1 + list.length) % list.length;
-        addScore(4);
-        el.dialogText.textContent = `Browsing previous item... ${getCurrentItem().name.toUpperCase()} detected.`;
-      }
-
-      if (lastDirection === direction) {
-        directionStreak += 1;
-      } else {
-        lastDirection = direction;
-        directionStreak = 1;
-      }
-
-      if (!secretUnlocked && directionStreak >= 3) {
-        unlockSecret();
-      }
-
-      updateSelectionView();
-    }
-
-    function previewItem() {
-      if (!started || confirmed) return;
-      const current = getCurrentItem();
-      const lines = [
-        current.preview,
-        `${current.name.toUpperCase()} is tagged as ${current.tag.toUpperCase()}.`,
-        `This choice gives Cool ${current.cool}, Fun ${current.fun}, and Chill ${current.chill}.`
-      ];
-      const randomLine = lines[Math.floor(Math.random() * lines.length)];
-      el.dialogText.textContent = randomLine;
-      el.previewText.textContent = current.preview;
-      addScore(5);
-      showToast('ITEM INFO +5');
-      flashScreen();
-    }
-
-    function unlockSecret() {
-      secretUnlocked = true;
-      const secretBanner = document.createElement('div');
-      secretBanner.className = 'secret-banner';
-      secretBanner.textContent = 'SECRET SUMMER MODE UNLOCKED';
-      document.getElementById('game').appendChild(secretBanner);
-      setTimeout(() => secretBanner.remove(), 2200);
-      addScore(15);
-      showToast('SECRET ITEM ADDED');
-      updateSelectionView();
-    }
-
-    function startCountdown() {
-      let count = 3;
-      clearInterval(countdownTimer);
-      el.countdown.textContent = count;
-      el.dialogText.textContent = 'Mission starting soon...';
-      flashScreen();
-
-      countdownTimer = setInterval(() => {
-        count -= 1;
-        if (count > 0) {
-          el.countdown.textContent = count;
-          el.dialogText.textContent = 'Mission starting soon...';
-          flashScreen();
-        } else if (count === 0) {
-          el.countdown.textContent = 'GO';
-          el.dialogText.textContent = 'Mission start';
-          flashScreen();
-        } else {
-          clearInterval(countdownTimer);
-          showResult();
-        }
-      }, 900);
-    }
-
-    function confirmSelection() {
-      if (!started || confirmed) return;
-      confirmed = true;
-      const current = getCurrentItem();
-      addScore(current.cool + current.fun + current.chill);
-      el.hudStatus.textContent = 'Locked';
-      el.dialogText.textContent = `${current.name.toUpperCase()} locked.`;
-      el.selectState.textContent = 'Mission Locked';
-      if (el.missionHint) el.missionHint.classList.remove('hidden');
-      showToast('MISSION STARTING SOON');
-      startCountdown();
-    }
-
-    function showResult() {
-      const current = getCurrentItem();
-      el.selectScreen.classList.add('hidden');
-      document.getElementById('gameScreen').classList.remove('hidden');
-      startMiniGame(current);
-    } and reached ${playerRank.toUpperCase()}.`;
-      updateHud();
-      flashScreen();
-    }
-
-    function goToSelection() {
-      started = true;
-      confirmed = false;
-      clearInterval(countdownTimer);
-      if (!playerId) playerId = generatePlayerId();
-      el.playerId.textContent = playerId;
-      el.startScreen.classList.add('hidden');
-      el.resultScreen.classList.add('hidden');
-      el.selectScreen.classList.remove('hidden');
-      el.hud.classList.remove('hidden');
-      el.countdown.textContent = '--';
-      el.dialogText.textContent = 'Use LEFT and RIGHT to browse your summer loadout.';
-      if (el.missionHint) el.missionHint.classList.add('hidden');
-      updateSelectionView();
-    }
-
-    function resetGame(toStart = false) {
-      clearInterval(countdownTimer);
-      index = 0;
-      score = 0;
-      confirmed = false;
-      playerId = generatePlayerId();
-      playerRank = ranks[0];
-      lastDirection = null;
-      directionStreak = 0;
-      secretUnlocked = false;
-      el.playerId.textContent = playerId;
-      el.playerRank.textContent = playerRank;
-      el.countdown.textContent = '--';
-      if (el.missionHint) el.missionHint.classList.add('hidden');
-      updateHud();
-      updateSelectionView();
-
-      if (toStart) {
-        started = false;
-        el.hud.classList.add('hidden');
-        el.selectScreen.classList.add('hidden');
-        el.resultScreen.classList.add('hidden');
-        el.startScreen.classList.remove('hidden');
-      } else {
-        goToSelection();
-      }
-    }
-
-    function handleKeydown(e) {
-      if (!started) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          goToSelection();
-        }
-        return;
-      }
-
-      if (el.resultScreen.classList.contains('hidden') === false) {
-        if (e.key.toLowerCase() === 'r') resetGame(false);
-        return;
-      }
-
-      if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        move('right');
-      }
-      if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        move('left');
-      }
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        confirmSelection();
-      }
-      if (e.key.toLowerCase() === 'p') {
-        e.preventDefault();
-        previewItem();
-      }
-      if (e.key.toLowerCase() === 'r') {
-        e.preventDefault();
-        resetGame(false);
-      }
-    }
-
-    function initAmbientEffects() {
-      const game = document.getElementById('game');
-      for (let i = 0; i < 10; i++) {
-        const sparkle = document.createElement('div');
-        sparkle.className = 'sparkle';
-        sparkle.textContent = '✦';
-        sparkle.style.left = Math.random() * 100 + '%';
-        sparkle.style.top = 10 + Math.random() * 45 + '%';
-        sparkle.style.animationDuration = (6 + Math.random() * 6) + 's';
-        sparkle.style.animationDelay = (Math.random() * 6) + 's';
-        game.appendChild(sparkle);
-      }
-      for (let i = 0; i < 10; i++) {
-        const bubble = document.createElement('div');
-        bubble.className = 'bubble';
-        bubble.textContent = '○';
-        bubble.style.left = Math.random() * 100 + '%';
-        bubble.style.animationDuration = (5 + Math.random() * 5) + 's';
-        bubble.style.animationDelay = (Math.random() * 5) + 's';
-        game.appendChild(bubble);
-      }
-    }
-
-    /* Button events */
-    el.startBtn.addEventListener('click', goToSelection);
-    el.leftBtn.addEventListener('click', () => move('left'));
-    el.rightBtn.addEventListener('click', () => move('right'));
-    el.previewBtn.addEventListener('click', previewItem);
-    el.confirmBtn.addEventListener('click', confirmSelection);
-    el.playAgainBtn.addEventListener('click', () => resetGame(false));
-    el.backToStartBtn.addEventListener('click', () => resetGame(true));
-    document.addEventListener('keydown', handleKeydown);
-
-    initAmbientEffects();
-
-    // MINI GAME
-    function startMiniGame(item){
-      let gameArea = document.getElementById('gameArea');
-      let gameScore = 0;
-      let time = 8;
-
-      let timerText = document.createElement('div');
-      timerText.style.position='absolute';
-      timerText.style.top='10px';
-      timerText.style.left='10px';
-      timerText.style.color='white';
-      timerText.innerText='Time: '+time;
-      gameArea.appendChild(timerText);
-
-      let spawn = setInterval(()=>{
-        let obj = document.createElement('div');
-        obj.innerText = item.icon;
-        obj.style.position='absolute';
-        obj.style.left=Math.random()*90+'%';
-        obj.style.top='0px';
-        obj.style.fontSize='30px';
-        obj.style.cursor='pointer';
-
-        obj.onclick=()=>{
-          gameScore+=10;
-          obj.remove();
-        }
-
-        gameArea.appendChild(obj);
-
-        let fall=setInterval(()=>{
-          obj.style.top=(obj.offsetTop+5)+'px';
-          if(obj.offsetTop>gameArea.offsetHeight){
-            obj.remove();
-            clearInterval(fall);
-          }
-        },30);
-
-      },600);
-
-      let countdown=setInterval(()=>{
-        time--;
-        timerText.innerText='Time: '+time;
-
-        if(time<=0){
-          clearInterval(spawn);
-          clearInterval(countdown);
-          gameArea.innerHTML='';
-          finalScreen(gameScore,item);
-        }
-      },1000);
-    }
-
-    function finalScreen(score,item){
-      document.getElementById('gameScreen').classList.add('hidden');
-      el.resultScreen.classList.remove('hidden');
-
-      let expoDate = '10052026';
-
-      el.resultIcon.textContent = item.icon;
-      el.resultItem.textContent = item.name;
-      el.resultPlayer.textContent = playerId;
-      el.resultScore.textContent = score;
-      el.resultRank.textContent = calculateRank(score);
-      el.resultSubtitle.textContent = `STAY TUNED • MISSION START SOON • ${expoDate}`;
-    }
-    applyTimeTheme();
-    updateExpoCountdown();
-    setInterval(updateExpoCountdown, 60000);
-    resetGame(true);
-  </script>
 </body>
 </html>
