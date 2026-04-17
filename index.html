@@ -915,6 +915,7 @@
             <input id="trophyInput" type="text" placeholder="ENTER TROPHY CODE" style="width:100%; padding:12px; border:4px solid var(--panel-border); text-align:center;">
             <button class="result-btn" id="addTrophyBtn">Add Trophy</button>
             <button class="result-btn primary hidden" id="claimBtn">Open Form</button>
+            <button class="result-btn hidden" id="level2RestartBtn">Start Again</button>
           </div>
         </div>
       </section>
@@ -941,13 +942,13 @@
       'WAVE456': 'wave',
       'ICE789': 'ice'
     };
-    const claimFormLink = 'https://forms.gle/REPLACE_WITH_YOUR_FORM_LINK';
+    const claimFormLink = 'https://forms.gle/EZGqy5DWHoigSwuaA';
 
     let index = 0;
     let score = 0;
     let started = false;
     let confirmed = false;
-    let playerId = '';
+    let playerId = localStorage.getItem('summerPlayerId') || '';
     let catchHits = 0;
     let catchTimer = null;
     let catchSpawner = null;
@@ -955,6 +956,7 @@
     let toastTimer = null;
     let passportId = '';
     let collected = JSON.parse(localStorage.getItem('summerCollectedTrophies') || '[]');
+    let currentStage = localStorage.getItem('summerCurrentStage') || 'start';
 
     const el = {
       hud: document.getElementById('hud'),
@@ -978,7 +980,7 @@
       addTrophyBtn: document.getElementById('addTrophyBtn'),
       claimBtn: document.getElementById('claimBtn'),
       claimMessage: document.getElementById('claimMessage'),
-      trophyActions: document.getElementById('trophyActions'),
+      level2RestartBtn: document.getElementById('level2RestartBtn'),
       backToStartBtn: document.getElementById('backToStartBtn'),
       playAgainBtn: document.getElementById('playAgainBtn'),
       prevIcon: document.getElementById('prevIcon'),
@@ -1025,6 +1027,11 @@
       trophyIceText: document.getElementById('trophyIceText')
     };
 
+    function setStage(stage) {
+      currentStage = stage;
+      localStorage.setItem('summerCurrentStage', stage);
+    }
+
     function currentItem() {
       return items[index];
     }
@@ -1033,8 +1040,11 @@
       return String(num).padStart(3, '0');
     }
 
-    function generatePlayerId() {
-      return 'P-' + Math.floor(1000 + Math.random() * 9000);
+    function generatePlayerId(force = false) {
+      if (!force && playerId) return playerId;
+      playerId = 'P-' + Math.floor(1000 + Math.random() * 9000);
+      localStorage.setItem('summerPlayerId', playerId);
+      return playerId;
     }
 
     function generatePassportId() {
@@ -1057,9 +1067,33 @@
     function updateHud() {
       el.hudPlayer.textContent = playerId || 'P-0000';
       el.hudScore.textContent = padScore(score);
-      el.hudLevel.textContent = el.level2Screen.classList.contains('hidden') ? '01' : '02';
-      el.hudStatus.textContent = el.level2Screen.classList.contains('hidden') ? (confirmed ? 'Mission' : 'Ready') : 'Passport';
+      el.hudLevel.textContent = currentStage === 'level2' ? '02' : '01';
+      el.hudStatus.textContent = currentStage === 'level2' ? 'Passport' : confirmed ? 'Mission' : 'Ready';
       el.playerRank.textContent = rankFromScore(score);
+    }
+
+    function showScreen(stage) {
+      el.startScreen.classList.add('hidden');
+      el.selectScreen.classList.add('hidden');
+      el.catchScreen.classList.add('hidden');
+      el.resultScreen.classList.add('hidden');
+      el.level2InfoScreen.classList.add('hidden');
+      el.level2Screen.classList.add('hidden');
+
+      if (stage === 'start') {
+        el.startScreen.classList.remove('hidden');
+        el.hud.classList.add('hidden');
+      } else {
+        el.hud.classList.remove('hidden');
+        if (stage === 'select') el.selectScreen.classList.remove('hidden');
+        if (stage === 'catch') el.catchScreen.classList.remove('hidden');
+        if (stage === 'result') el.resultScreen.classList.remove('hidden');
+        if (stage === 'level2info') el.level2InfoScreen.classList.remove('hidden');
+        if (stage === 'level2') el.level2Screen.classList.remove('hidden');
+      }
+
+      setStage(stage);
+      updateHud();
     }
 
     function makeDots() {
@@ -1127,8 +1161,7 @@
 
     function previewItem() {
       if (!started || confirmed) return;
-      const current = currentItem();
-      el.dialogText.textContent = 'Hint: ' + current.preview;
+      el.dialogText.textContent = 'Hint: ' + currentItem().preview;
       showToast('Quick info');
       flashScreen();
     }
@@ -1165,8 +1198,7 @@
     }
 
     function openCatchGame() {
-      el.selectScreen.classList.add('hidden');
-      el.catchScreen.classList.remove('hidden');
+      showScreen('catch');
       startCatchGame();
     }
 
@@ -1229,19 +1261,16 @@
     }
 
     function showResult() {
-      el.catchScreen.classList.add('hidden');
-      el.resultScreen.classList.remove('hidden');
+      showScreen('result');
       el.resultPlayer.textContent = playerId;
       el.resultScore.textContent = padScore(score);
       el.passportIdText.textContent = passportId;
       el.resultSubtitle.textContent = 'Level 2 starts on 10 May 2026.';
-      updateHud();
       flashScreen();
     }
 
     function openLevel2Info() {
-      el.resultScreen.classList.add('hidden');
-      el.level2InfoScreen.classList.remove('hidden');
+      showScreen('level2info');
       el.passportIdText2.textContent = passportId;
       el.level2CodeInput.value = '';
       el.level2HintText.textContent = 'Waiting for the release code.';
@@ -1274,6 +1303,7 @@
         el.trophyInput.classList.remove('hidden');
         el.addTrophyBtn.classList.remove('hidden');
       }
+      el.level2RestartBtn.classList.remove('hidden');
     }
 
     function unlockLevel2() {
@@ -1283,11 +1313,9 @@
         showToast('Wrong code');
         return;
       }
-      el.level2InfoScreen.classList.add('hidden');
-      el.level2Screen.classList.remove('hidden');
+      showScreen('level2');
       el.passportIdText3.textContent = passportId;
       renderTrophies();
-      updateHud();
       showToast('Level 2 unlocked');
       flashScreen();
     }
@@ -1322,15 +1350,9 @@
       clearInterval(countdownTimer);
       clearInterval(catchTimer);
       clearInterval(catchSpawner);
-      if (!playerId) playerId = generatePlayerId();
+      generatePlayerId();
       el.playerId.textContent = playerId;
-      el.startScreen.classList.add('hidden');
-      el.catchScreen.classList.add('hidden');
-      el.resultScreen.classList.add('hidden');
-      el.level2InfoScreen.classList.add('hidden');
-      el.level2Screen.classList.add('hidden');
-      el.selectScreen.classList.remove('hidden');
-      el.hud.classList.remove('hidden');
+      showScreen('select');
       el.dialogText.textContent = 'Find the pattern. 20260510.';
       updateSelectionView();
     }
@@ -1343,25 +1365,29 @@
       score = 0;
       catchHits = 0;
       confirmed = false;
-      playerId = generatePlayerId();
+      generatePlayerId(true);
       passportId = generatePassportId();
       collected = JSON.parse(localStorage.getItem('summerCollectedTrophies') || '[]');
       el.playerId.textContent = playerId;
-      updateHud();
       updateSelectionView();
       renderTrophies();
       if (toStart) {
         started = false;
-        el.hud.classList.add('hidden');
-        el.selectScreen.classList.add('hidden');
-        el.catchScreen.classList.add('hidden');
-        el.resultScreen.classList.add('hidden');
-        el.level2InfoScreen.classList.add('hidden');
-        el.level2Screen.classList.add('hidden');
-        el.startScreen.classList.remove('hidden');
+        showScreen('start');
       } else {
         goToSelection();
       }
+    }
+
+    function hardResetAll() {
+      localStorage.removeItem('summerCollectedTrophies');
+      localStorage.removeItem('summerCurrentStage');
+      localStorage.removeItem('summerPassportId');
+      localStorage.removeItem('summerPlayerId');
+      collected = [];
+      passportId = generatePassportId();
+      playerId = '';
+      resetGame(true);
     }
 
     function handleKeydown(e) {
@@ -1423,23 +1449,53 @@
     el.rightBtn.addEventListener('click', () => move('right'));
     el.previewBtn.addEventListener('click', previewItem);
     el.confirmBtn.addEventListener('click', confirmSelection);
-    el.playAgainBtn.addEventListener('click', () => {
-      localStorage.removeItem('summerCollectedTrophies');
-      resetGame(false);
-    });
+    el.playAgainBtn.addEventListener('click', () => hardResetAll());
     el.nextBtn.addEventListener('click', openLevel2Info);
     el.unlockLevel2Btn.addEventListener('click', unlockLevel2);
     el.addTrophyBtn.addEventListener('click', addTrophy);
     el.claimBtn.addEventListener('click', openClaimForm);
-    el.backToStartBtn.addEventListener('click', () => resetGame(true));
+    el.backToStartBtn.addEventListener('click', () => hardResetAll());
+    el.level2RestartBtn.addEventListener('click', () => hardResetAll());
     document.addEventListener('keydown', handleKeydown);
 
     initAmbientEffects();
     passportId = generatePassportId();
+    generatePlayerId();
     renderTrophies();
     updateExpoCountdown();
     setInterval(updateExpoCountdown, 60000);
-    resetGame(true);
+
+    if (currentStage === 'select') {
+      started = true;
+      el.playerId.textContent = playerId;
+      updateSelectionView();
+      showScreen('select');
+    } else if (currentStage === 'catch') {
+      started = true;
+      confirmed = true;
+      el.playerId.textContent = playerId;
+      updateSelectionView();
+      openCatchGame();
+    } else if (currentStage === 'result') {
+      started = true;
+      el.playerId.textContent = playerId;
+      updateSelectionView();
+      showResult();
+    } else if (currentStage === 'level2info') {
+      started = true;
+      el.playerId.textContent = playerId;
+      updateSelectionView();
+      openLevel2Info();
+    } else if (currentStage === 'level2') {
+      started = true;
+      el.playerId.textContent = playerId;
+      updateSelectionView();
+      showScreen('level2');
+      el.passportIdText3.textContent = passportId;
+      renderTrophies();
+    } else {
+      resetGame(true);
+    }
   </script>
 </body>
 </html>
