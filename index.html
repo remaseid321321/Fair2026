@@ -1433,11 +1433,7 @@
     el.claimBtn.addEventListener('click', openClaimForm);
     el.backToStartBtn.addEventListener('click', () => resetGame(true));
     document.addEventListener('keydown', handleKeydown);
-const claimBtn = document.getElementById('claimBtn');
 
-  claimBtn.addEventListener('click', function() {
-    window.open('https://docs.google.com/forms/d/e/1FAIpQLSdsyLsTO4AHfbICsbDqHH_bxAZeJi-bzhlVuR5vuzzQKg9KmA/viewform?usp=header', '_blank');
-  });
     initAmbientEffects();
     passportId = generatePassportId();
     renderTrophies();
