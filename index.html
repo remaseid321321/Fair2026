@@ -592,8 +592,7 @@
 
     .catch-object {
       position: absolute;
-      font-size: 44px;
-      padding: 10px;
+      font-size: 34px;
       user-select: none;
       cursor: pointer;
       filter: drop-shadow(0 6px 0 rgba(0,0,0,.12));
@@ -918,8 +917,13 @@
       <section class="start-screen" id="startScreen">
         <div class="start-card">
           <h1 class="title">SUMMER ARCADE</h1>
-          <p class="subtitle">you are selected for summer secret mission !!</p>
-        
+          <p class="subtitle">Choose an item. Start mission 1.</p>
+          <div class="mini-icons">
+            <span>🕶️</span>
+            <span>🍦</span>
+            <span>🏖️</span>
+            <span>🌊</span>
+          </div>
           <div class="blinking">PRESS START</div>
           <div class="result-actions" style="margin-top:18px;">
             <button class="result-btn primary" id="startBtn">Start</button>
@@ -1014,6 +1018,81 @@
         </div>
       </section>
 
+      <section class="catch-screen hidden" id="gateScreen">
+        <div class="catch-card">
+          <div class="catch-head">
+            <h2 class="catch-title">LEVEL 2 LOCKED</h2>
+            <div class="catch-mini">Enter access code</div>
+          </div>
+
+          <div style="display:grid; gap:12px; max-width:420px; margin:0 auto;">
+            <input id="level2CodeInput" type="text" placeholder="ENTER CODE" style="width:100%; padding:14px; border:4px solid var(--panel-border); font:inherit; text-transform:uppercase; text-align:center; font-weight:bold; color:var(--text);">
+            <button class="result-btn primary" id="unlockLevel2Btn">Unlock Level 2</button>
+            <div class="small-note" id="level2CodeHint" style="color:#d9f2ff; text-align:center;">Find the access code to continue.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="catch-screen hidden" id="gateScreen">
+        <div class="catch-card">
+          <div class="catch-head">
+            <h2 class="catch-title">LEVEL 2 LOCKED</h2>
+            <div class="catch-mini">Enter access code</div>
+          </div>
+
+          <div style="display:grid; gap:12px; max-width:420px; margin:0 auto;">
+            <input id="level2CodeInput" type="text" placeholder="ENTER CODE" style="width:100%; padding:14px; border:4px solid var(--panel-border); font:inherit; text-transform:uppercase; text-align:center; font-weight:bold; color:var(--text);">
+            <button class="result-btn primary" id="unlockLevel2Btn">Unlock Level 2</button>
+            <div class="small-note" id="level2CodeHint" style="color:#d9f2ff; text-align:center;">Find the access code to continue.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="catch-screen hidden" id="gateScreen">
+        <div class="catch-card">
+          <div class="catch-head">
+            <h2 class="catch-title">LEVEL 2 LOCKED</h2>
+            <div class="catch-mini">Enter access code</div>
+          </div>
+
+          <div style="display:grid; gap:12px; max-width:420px; margin:0 auto;">
+            <input id="level2CodeInput" type="text" placeholder="ENTER CODE" style="width:100%; padding:14px; border:4px solid var(--panel-border); font:inherit; text-transform:uppercase; text-align:center; font-weight:bold; color:var(--text);">
+            <button class="result-btn primary" id="unlockLevel2Btn">Unlock Level 2</button>
+            <div class="small-note" id="level2CodeHint" style="color:#d9f2ff; text-align:center;">Find the access code to continue.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="catch-screen hidden" id="gateScreen">
+        <div class="catch-card">
+          <div class="catch-head">
+            <h2 class="catch-title">LEVEL 2 LOCKED</h2>
+            <div class="catch-mini">Enter access code</div>
+          </div>
+
+          <div style="display:grid; gap:12px; max-width:420px; margin:0 auto;">
+            <input id="level2CodeInput" type="text" placeholder="ENTER CODE" style="width:100%; padding:14px; border:4px solid var(--panel-border); font:inherit; text-transform:uppercase; text-align:center; font-weight:bold; color:var(--text);">
+            <button class="result-btn primary" id="unlockLevel2Btn">Unlock Level 2</button>
+            <div class="small-note" id="level2CodeHint" style="color:#d9f2ff; text-align:center;">Find the access code to continue.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="catch-screen hidden" id="gateScreen">
+        <div class="catch-card">
+          <div class="catch-head">
+            <h2 class="catch-title">LEVEL 2 LOCKED</h2>
+            <div class="catch-mini">Enter access code</div>
+          </div>
+
+          <div style="display:grid; gap:12px; max-width:420px; margin:0 auto;">
+            <input id="level2CodeInput" type="text" placeholder="ENTER CODE" style="width:100%; padding:14px; border:4px solid var(--panel-border); font:inherit; text-transform:uppercase; text-align:center; font-weight:bold; color:var(--text);">
+            <button class="result-btn primary" id="unlockLevel2Btn">Unlock Level 2</button>
+            <div class="small-note" id="level2CodeHint" style="color:#d9f2ff; text-align:center;">Find the access code to continue.</div>
+          </div>
+        </div>
+      </section>
+
       <section class="catch-screen hidden" id="catchScreen">
         <div class="catch-card">
           <div class="catch-head">
@@ -1031,7 +1110,24 @@
         </div>
       </section>
 
-      <section class="result-screen hidden" id="resultScreen">
+      <section class="result-screen hidden" id="passportScreen">
+        <div class="result-card">
+          <div class="result-top">
+            <div class="result-icon">🏆</div>
+            <div>
+              <h2 class="result-main-title">SUMMER PASSPORT</h2>
+              <div id="passportSubtitle">Collect booth trophies.</div>
+            </div>
+          </div>
+
+          <div class="result-grid" id="passportGrid">
+          </div>
+
+          <div style="display:grid; gap:10px; max-width:420px; margin:6px auto 0;">
+            <input id="boothCodeInput" type="text" placeholder="ENTER BOOTH CODE" style="width:100%; padding:14px; border:4px solid var(--panel-border); font:inherit; text-transform:uppercase; text-align:center; font-weight:bold; color:var(--text);">
+            <button class="result-btn primary" id="submitBoothCodeBtn">Submit Code</button>
+            <div class="small-note" id="passportProgressText" style="text-align:center; color:#d9f2ff;">0 / 4 trophies</div>
+          </div>
         <div class="result-card">
           <div class="result-top">
             <div class="result-icon">🌴</div>
@@ -1075,10 +1171,10 @@
 
   <script>
     const items = [
-      { icon: '🕶️', name: 'Sun Glasses', tag: 'Cool', desc: 'Bright shield.', preview: '20260510 → 10 / 05 → summer starts with a clue.', cool: 8, fun: 6, chill: 9 },
-      { icon: '🍦', name: 'Ice Cream', tag: 'Sweet', desc: 'Quick boost.', preview: '05 + 10 = a date. Why does summer keep pointing there?', cool: 6, fun: 10, chill: 8 },
-      { icon: '🏖️', name: 'Beach Ball', tag: 'Fun', desc: 'Party pick.', preview: 'A beach game, a bright day, and a hidden code: 20260510.', cool: 7, fun: 9, chill: 5 },
-      { icon: '🌊', name: 'Ocean Waves', tag: 'Chill', desc: 'Calm flow.',preview: 'Waves, sun, sand... and one date that keeps returning.', cool: 5, fun: 7, chill: 10 }
+      { icon: '🕶️', name: 'Sun Glasses', tag: 'Cool', desc: 'Bright shield.', preview: 'Cool shield for mission 1.', cool: 8, fun: 6, chill: 9 },
+      { icon: '🍦', name: 'Ice Cream', tag: 'Sweet', desc: 'Quick boost.', preview: 'Sweet boost for mission 1.', cool: 6, fun: 10, chill: 8 },
+      { icon: '🏖️', name: 'Beach Ball', tag: 'Fun', desc: 'Party pick.', preview: 'High fun for mission 1.', cool: 7, fun: 9, chill: 5 },
+      { icon: '🌊', name: 'Ocean Waves', tag: 'Chill', desc: 'Calm flow.', preview: 'Smooth mood for mission 1.', cool: 5, fun: 7, chill: 10 }
     ];
 
     const catchIcons = ['🍦','🏖️','🌊','🌴','🕶️','🐚'];
@@ -1165,7 +1261,7 @@
     function updateHud() {
       el.hudPlayer.textContent = playerId || 'P-0000';
       el.hudScore.textContent = padScore(score);
-      el.hudLevel.textContent = confirmed ? '01' : '01';
+      el.hudLevel.textContent = confirmed ? '02' : '01';
       el.hudStatus.textContent = confirmed ? 'Mission' : 'Ready';
       el.playerRank.textContent = rankFromScore(score);
     }
@@ -1231,6 +1327,7 @@
       if (!started || confirmed) return;
       if (direction === 'right') index = (index + 1) % items.length;
       else index = (index - 1 + items.length) % items.length;
+      score += 2;
       updateSelectionView();
     }
 
@@ -1243,27 +1340,28 @@
     }
 
     function startMissionCountdown() {
-  let count = 3;
-  clearInterval(countdownTimer);
-
-  el.dialogText.textContent = 'Mission 1 starting soon... ' + count;
-  flashScreen();
-
-  countdownTimer = setInterval(() => {
-    count -= 1;
-
-    if (count > 0) {
-      el.dialogText.textContent = 'Mission 1 starting soon... ' + count;
-      flashScreen();
-    } else if (count === 0) {
-      el.dialogText.textContent = 'Mission 1 start';
-      flashScreen();
-    } else {
+      let count = 3;
       clearInterval(countdownTimer);
-      openCatchGame();
+      el.countdown.textContent = count;
+      el.dialogText.textContent = 'Mission 1 starting soon...';
+      flashScreen();
+
+      countdownTimer = setInterval(() => {
+        count -= 1;
+        if (count > 0) {
+          el.countdown.textContent = count;
+          el.dialogText.textContent = 'Mission 1 starting soon...';
+          flashScreen();
+        } else if (count === 0) {
+          el.countdown.textContent = 'GO';
+          el.dialogText.textContent = 'Mission 1 start';
+          flashScreen();
+        } else {
+          clearInterval(countdownTimer);
+          openCatchGame();
+        }
+      }, 850);
     }
-  }, 850);
-}
 
     function confirmSelection() {
       if (!started || confirmed) return;
@@ -1295,177 +1393,10 @@
 
       catchSpawner = setInterval(() => {
         spawnCatchObject();
-      }, 400);
+      }, 520);
 
       catchTimer = setInterval(() => {
         timeLeft -= 1;
         el.catchTime.textContent = timeLeft;
         if (timeLeft <= 0) finishCatchGame();
-      }, 1000);
-    }
-
-    function spawnCatchObject() {
-      const obj = document.createElement('div');
-      obj.className = 'catch-object';
-      obj.textContent = catchIcons[Math.floor(Math.random() * catchIcons.length)];
-      obj.style.left = Math.random() * 88 + '%';
-      obj.style.top = '-10px';
-      el.catchArea.appendChild(obj);
-
-      obj.addEventListener('click', () => {
-        catchHits += 1;
-        score += 10;
-        el.catchHits.textContent = catchHits;
-        updateHud();
-        obj.remove();
-      });
-
-      const fall = setInterval(() => {
-        if (!obj.isConnected) {
-          clearInterval(fall);
-          return;
-        }
-        obj.style.top = (obj.offsetTop + 7) + 'px';
-        if (obj.offsetTop > el.catchArea.clientHeight) {
-          obj.remove();
-          clearInterval(fall);
-        }
-      }, 30);
-    }
-
-    function finishCatchGame() {
-      clearInterval(catchTimer);
-      clearInterval(catchSpawner);
-      el.catchArea.innerHTML = '';
-      showResult();
-    }
-
-    function showResult() {
-      el.catchScreen.classList.add('hidden');
-      el.resultScreen.classList.remove('hidden');
-      el.resultPlayer.textContent = playerId;
-      el.resultScore.textContent = padScore(score);
-      el.resultSubtitle.textContent = catchHits >= 12 ? 'Level 2 coming soon.' : 'Mission complete. Level 2 coming soon.';
-      updateHud();
-      flashScreen();
-    }
-
-    function goToSelection() {
-      started = true;
-      confirmed = false;
-      clearInterval(countdownTimer);
-      clearInterval(catchTimer);
-      clearInterval(catchSpawner);
-      if (!playerId) playerId = generatePlayerId();
-      el.playerId.textContent = playerId;
-      el.startScreen.classList.add('hidden');
-      el.catchScreen.classList.add('hidden');
-      el.resultScreen.classList.add('hidden');
-      el.selectScreen.classList.remove('hidden');
-      el.hud.classList.remove('hidden');
-      updateSelectionView();
-    }
-
-    function resetGame(toStart = false) {
-      clearInterval(countdownTimer);
-      clearInterval(catchTimer);
-      clearInterval(catchSpawner);
-      index = 0;
-      score = 0;
-      catchHits = 0;
-      confirmed = false;
-      playerId = generatePlayerId();
-      el.playerId.textContent = playerId;
-      updateHud();
-      updateSelectionView();
-
-      if (toStart) {
-        started = false;
-        el.hud.classList.add('hidden');
-        el.selectScreen.classList.add('hidden');
-        el.catchScreen.classList.add('hidden');
-        el.resultScreen.classList.add('hidden');
-        el.startScreen.classList.remove('hidden');
-      } else {
-        goToSelection();
-      }
-    }
-
-    function handleKeydown(e) {
-      if (!started) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          goToSelection();
-        }
-        return;
-      }
-
-      if (!el.selectScreen.classList.contains('hidden')) {
-        if (e.key === 'ArrowRight') { e.preventDefault(); move('right'); }
-        if (e.key === 'ArrowLeft') { e.preventDefault(); move('left'); }
-        if (e.key.toLowerCase() === 'i') { e.preventDefault(); previewItem(); }
-        if (e.key === 'Enter') { e.preventDefault(); confirmSelection(); }
-      }
-
-      if (!el.resultScreen.classList.contains('hidden') && e.key.toLowerCase() === 'r') {
-        e.preventDefault();
-        resetGame(false);
-      }
-    }
-
-    function initAmbientEffects() {
-      const root = document.getElementById('gameRoot');
-      for (let i = 0; i < 8; i++) {
-        const sparkle = document.createElement('div');
-        sparkle.className = 'sparkle';
-        sparkle.textContent = '✦';
-        sparkle.style.left = Math.random() * 100 + '%';
-        sparkle.style.top = 8 + Math.random() * 42 + '%';
-        sparkle.style.animationDuration = (6 + Math.random() * 5) + 's';
-        sparkle.style.animationDelay = (Math.random() * 6) + 's';
-        root.appendChild(sparkle);
-      }
-      for (let i = 0; i < 8; i++) {
-        const bubble = document.createElement('div');
-        bubble.className = 'bubble';
-        bubble.textContent = '○';
-        bubble.style.left = Math.random() * 100 + '%';
-        bubble.style.bottom = 92 + Math.random() * 80 + 'px';
-        bubble.style.animationDuration = (5 + Math.random() * 4) + 's';
-        bubble.style.animationDelay = (Math.random() * 5) + 's';
-        root.appendChild(bubble);
-      }
-    }
-
-    function updateExpoCountdown() {
-  const target = new Date('2026-05-10T00:00:00').getTime();
-  const now = new Date().getTime();
-  const diff = target - now;
-
-  if (diff <= 0) {
-    el.countdown.textContent = '00d 00h 00m';
-    return;
-  }
-
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  const minutes = Math.floor((diff / (1000 * 60)) % 60);
-
-  el.countdown.textContent = `${days}d ${hours}h ${minutes}m`;
-}
-    el.startBtn.addEventListener('click', goToSelection);
-    el.leftBtn.addEventListener('click', () => move('left'));
-    el.rightBtn.addEventListener('click', () => move('right'));
-    el.previewBtn.addEventListener('click', previewItem);
-    el.confirmBtn.addEventListener('click', confirmSelection);
-    el.playAgainBtn.addEventListener('click', () => resetGame(false));
-    el.backToStartBtn.addEventListener('click', () => resetGame(true));
-    document.addEventListener('keydown', handleKeydown);
-
-   initAmbientEffects();
-updateExpoCountdown();
-setInterval(updateExpoCountdown, 60000);
-resetGame(true);
-  </script>
-</body>
-</html>
+      }, 1
