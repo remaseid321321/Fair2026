@@ -14,7 +14,6 @@
       --sun: #ffd84b;
       --panel: rgba(249, 244, 255, 0.94);
       --panel-border: #1a1635;
-      --panel-soft: rgba(26, 22, 53, 0.14);
       --dark: #171233;
       --dark-2: #241b4f;
       --text: #181228;
@@ -28,7 +27,6 @@
     }
 
     * { box-sizing: border-box; }
-
     html, body {
       margin: 0;
       min-height: 100%;
@@ -38,7 +36,7 @@
     }
 
     body { overflow: hidden; }
-    button { font: inherit; }
+    button, input { font: inherit; }
 
     .game {
       position: relative;
@@ -60,12 +58,7 @@
       animation: sunPulse 3.2s ease-in-out infinite;
     }
 
-    .sea {
-      position: absolute;
-      inset: 48% 0 0 0;
-      overflow: hidden;
-    }
-
+    .sea { position: absolute; inset: 48% 0 0 0; overflow: hidden; }
     .wave {
       position: absolute;
       left: -18%;
@@ -127,28 +120,14 @@
       pointer-events: none;
       user-select: none;
     }
-    .sparkle {
-      font-size: 14px;
-      opacity: .5;
-      animation: sparkleFloat linear infinite;
-    }
-    .bubble {
-      font-size: 14px;
-      opacity: .35;
-      animation: bubbleRise linear infinite;
-    }
+    .sparkle { font-size: 14px; opacity: .5; animation: sparkleFloat linear infinite; }
+    .bubble { font-size: 14px; opacity: .35; animation: bubbleRise linear infinite; }
 
     .scanlines {
       position: absolute;
       inset: 0;
       pointer-events: none;
-      background: repeating-linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.04),
-        rgba(0, 0, 0, 0.04) 1px,
-        transparent 1px,
-        transparent 4px
-      );
+      background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04) 1px, transparent 1px, transparent 4px);
       mix-blend-mode: multiply;
       z-index: 40;
     }
@@ -210,32 +189,19 @@
 
     .hidden { display: none !important; }
 
-    .start-screen,
-    .result-screen,
-    .catch-screen {
+    .start-screen, .result-screen, .catch-screen {
       width: min(780px, 94vw);
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
-    .start-card,
-    .result-card,
-    .catch-card,
-    .panel,
-    .command-btn,
-    .main-card,
-    .side-card,
-    .dialog-box,
-    .result-box,
-    .result-btn {
+    .start-card, .result-card, .catch-card, .panel, .command-btn, .main-card, .side-card, .dialog-box, .result-box, .result-btn {
       border: 4px solid var(--panel-border);
       box-shadow: 0 8px 0 var(--shadow);
     }
 
-    .start-card,
-    .result-card,
-    .catch-card {
+    .start-card, .result-card, .catch-card {
       width: 100%;
       background: rgba(17, 13, 35, 0.9);
       padding: 26px;
@@ -253,18 +219,10 @@
 
     .subtitle {
       margin: 14px auto 0;
-      max-width: 480px;
+      max-width: 520px;
       color: #e5f8ff;
       font-size: 14px;
       line-height: 1.65;
-    }
-
-    .mini-icons {
-      display: flex;
-      justify-content: center;
-      gap: 14px;
-      margin-top: 18px;
-      font-size: 32px;
     }
 
     .blinking {
@@ -326,8 +284,7 @@
       min-height: 0;
     }
 
-    .side-card,
-    .main-card {
+    .side-card, .main-card {
       background: linear-gradient(180deg, #ffffff, #eee6ff);
       display: flex;
       flex-direction: column;
@@ -442,8 +399,7 @@
       transition: transform .12s ease, background .2s ease;
     }
 
-    .command-btn:hover,
-    .command-btn.active {
+    .command-btn:hover, .command-btn.active {
       background: #382d6f;
       transform: translateY(-2px);
     }
@@ -592,14 +548,19 @@
 
     .catch-object {
       position: absolute;
-      font-size: 34px;
+      font-size: 44px;
+      padding: 10px;
       user-select: none;
       cursor: pointer;
       filter: drop-shadow(0 6px 0 rgba(0,0,0,.12));
       transition: transform .08s ease;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .catch-object:hover { transform: scale(1.08); }
+    @media (hover: hover) and (pointer: fine) {
+      .catch-object:hover { transform: scale(1.08); }
+    }
 
     .result-card {
       display: grid;
@@ -640,6 +601,40 @@
       text-align: left;
     }
 
+    .trophy-box {
+      position: relative;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-align: center;
+    }
+
+    .trophy-icon {
+      font-size: 56px;
+      opacity: .25;
+      filter: grayscale(1);
+      transition: transform .2s ease, opacity .2s ease, filter .2s ease;
+    }
+
+    .trophy-box.unlocked .trophy-icon {
+      opacity: 1;
+      filter: grayscale(0);
+      transform: scale(1.06);
+    }
+
+    .trophy-lock {
+      font-size: 12px;
+      color: #b9dbff;
+      text-transform: uppercase;
+    }
+
+    .trophy-box.unlocked .trophy-lock {
+      color: #9cff69;
+    }
+
     .result-box small {
       display: block;
       color: #b9dbff;
@@ -673,13 +668,20 @@
       transition: transform .12s ease, background .2s ease;
     }
 
-    .result-btn:hover {
-      transform: translateY(-2px);
-      background: #46387f;
-    }
-
+    .result-btn:hover { transform: translateY(-2px); background: #46387f; }
     .result-btn.primary { background: #007f9c; }
     .result-btn.primary:hover { background: #0e97b6; }
+
+    .passport-id {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 8px 10px;
+      border: 3px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: #d8f4ff;
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
 
     .flash-overlay {
       position: absolute;
@@ -707,32 +709,18 @@
     }
 
     @media (max-width: 980px) {
-      .hud {
-        grid-template-columns: repeat(2, 1fr);
-        width: calc(100vw - 18px);
-      }
-
-      .screen {
-        inset: 132px 8px 8px 8px;
-      }
-
-      .select-screen {
-        grid-template-columns: 1fr;
-        height: auto;
-        max-height: calc(100vh - 148px);
-        overflow: auto;
-      }
+      .hud { grid-template-columns: repeat(2, 1fr); width: calc(100vw - 18px); }
+      .screen { inset: 132px 8px 8px 8px; }
+      .select-screen { grid-template-columns: 1fr; height: auto; max-height: calc(100vh - 148px); overflow: auto; }
     }
 
     @media (max-width: 640px) {
       html, body { overflow: auto; }
       body { min-height: 100dvh; }
       .game { min-height: 100dvh; height: auto; overflow: auto; }
-
       .sun { width: 72px; height: 72px; right: 20px; top: 28px; }
       .palm { left: 10px; font-size: 62px; bottom: 92px; }
       .island { right: 20px; font-size: 38px; bottom: 116px; }
-
       .hud {
         position: relative;
         top: auto;
@@ -742,14 +730,8 @@
         margin: 8px auto 0;
         gap: 6px;
       }
-
-      .hud-item {
-        min-height: 46px;
-        padding: 7px 9px;
-      }
-
+      .hud-item { min-height: 46px; padding: 7px 9px; }
       .hud-value { font-size: 15px; }
-
       .screen {
         position: relative;
         inset: auto;
@@ -757,126 +739,39 @@
         min-height: auto;
         align-items: flex-start;
       }
-
-      .start-screen,
-      .result-screen,
-      .catch-screen,
-      .select-screen { width: 100%; }
-
-      .start-card,
-      .result-card,
-      .catch-card,
-      .panel,
-      .dialog-box,
-      .command-btn,
-      .result-btn,
-      .main-card,
-      .side-card,
-      .result-box {
-        box-shadow: 0 5px 0 var(--shadow);
-      }
-
-      .start-card,
-      .result-card,
-      .catch-card { padding: 18px 14px; }
-
-      .subtitle,
-      .small-note,
-      .dialog-text,
-      .command-btn span { font-size: 11px; }
-
-      .select-screen {
-        grid-template-columns: 1fr;
-        height: auto;
-        max-height: none;
-        overflow: visible;
-      }
-
-      .carousel {
-        grid-template-columns: 52px 1fr 52px;
-        gap: 8px;
-      }
-
+      .start-screen, .result-screen, .catch-screen, .select-screen { width: 100%; }
+      .start-card, .result-card, .catch-card, .panel, .dialog-box, .command-btn, .result-btn, .main-card, .side-card, .result-box { box-shadow: 0 5px 0 var(--shadow); }
+      .start-card, .result-card, .catch-card { padding: 18px 14px; }
+      .subtitle, .small-note, .dialog-text, .command-btn span { font-size: 11px; }
+      .select-screen { grid-template-columns: 1fr; height: auto; max-height: none; overflow: visible; }
+      .carousel { grid-template-columns: 52px 1fr 52px; gap: 8px; }
       .side-card { height: 110px; }
       .side-card .icon { font-size: 24px; }
-
-      .main-card {
-        height: auto;
-        min-height: 214px;
-        padding: 12px 8px;
-      }
-
+      .main-card { height: auto; min-height: 214px; padding: 12px 8px; }
       .main-card .icon { font-size: 52px; }
       .item-name { font-size: 16px; }
       .item-desc { font-size: 10px; max-width: 220px; }
       .stats { width: 100%; }
       .stat { grid-template-columns: 48px 1fr 24px; gap: 6px; }
-
-      .commands,
-      .result-grid { grid-template-columns: 1fr; }
-
+      .commands, .result-grid { grid-template-columns: 1fr; }
       .result-btn { min-width: 100%; }
-
       .catch-area { height: 48vh; }
-      .catch-object { font-size: 28px; }
-
-      .toast {
-        top: auto;
-        bottom: 8px;
-        left: 8px;
-        right: 8px;
-      }
+      .catch-object { font-size: 34px; padding: 12px; }
+      .toast { top: auto; bottom: 8px; left: 8px; right: 8px; }
     }
 
-    @keyframes waveMove {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(18%); }
-    }
-    @keyframes sunPulse {
-      0%,100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
-    @keyframes sway {
-      0%,100% { transform: rotate(-3deg); }
-      50% { transform: rotate(3deg); }
-    }
-    @keyframes float {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-    @keyframes shellBob {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-    @keyframes sparkleFloat {
-      0% { transform: translateY(0); opacity: 0; }
-      15% { opacity: .5; }
-      100% { transform: translateY(-160px); opacity: 0; }
-    }
-    @keyframes bubbleRise {
-      0% { transform: translateY(0) scale(.8); opacity: 0; }
-      20% { opacity: .35; }
-      100% { transform: translateY(-210px) scale(1.05); opacity: 0; }
-    }
+    @keyframes waveMove { 0% { transform: translateX(0); } 100% { transform: translateX(18%); } }
+    @keyframes sunPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+    @keyframes sway { 0%,100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes shellBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    @keyframes sparkleFloat { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: .5; } 100% { transform: translateY(-160px); opacity: 0; } }
+    @keyframes bubbleRise { 0% { transform: translateY(0) scale(.8); opacity: 0; } 20% { opacity: .35; } 100% { transform: translateY(-210px) scale(1.05); opacity: 0; } }
     @keyframes blink { 50% { opacity: 0; } }
-    @keyframes bob {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-    @keyframes popCard {
-      0% { transform: scale(.96); }
-      70% { transform: scale(1.02); }
-      100% { transform: scale(1); }
-    }
-    @keyframes flashScreen {
-      0% { opacity: 0; }
-      35% { opacity: 1; }
-      100% { opacity: 0; }
-    }
-    @keyframes slideIn {
-      from { transform: translateX(26px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
+    @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    @keyframes popCard { 0% { transform: scale(.96); } 70% { transform: scale(1.02); } 100% { transform: scale(1); } }
+    @keyframes flashScreen { 0% { opacity: 0; } 35% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes slideIn { from { transform: translateX(26px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
   </style>
 </head>
 <body>
@@ -917,13 +812,7 @@
       <section class="start-screen" id="startScreen">
         <div class="start-card">
           <h1 class="title">SUMMER ARCADE</h1>
-          <p class="subtitle">Choose an item. Start mission 1.</p>
-          <div class="mini-icons">
-            <span>🕶️</span>
-            <span>🍦</span>
-            <span>🏖️</span>
-            <span>🌊</span>
-          </div>
+          <p class="subtitle">You are selected for a summer secret mission.</p>
           <div class="blinking">PRESS START</div>
           <div class="result-actions" style="margin-top:18px;">
             <button class="result-btn primary" id="startBtn">Start</button>
@@ -1018,81 +907,6 @@
         </div>
       </section>
 
-      <section class="catch-screen hidden" id="gateScreen">
-        <div class="catch-card">
-          <div class="catch-head">
-            <h2 class="catch-title">LEVEL 2 LOCKED</h2>
-            <div class="catch-mini">Enter access code</div>
-          </div>
-
-          <div style="display:grid; gap:12px; max-width:420px; margin:0 auto;">
-            <input id="level2CodeInput" type="text" placeholder="ENTER CODE" style="width:100%; padding:14px; border:4px solid var(--panel-border); font:inherit; text-transform:uppercase; text-align:center; font-weight:bold; color:var(--text);">
-            <button class="result-btn primary" id="unlockLevel2Btn">Unlock Level 2</button>
-            <div class="small-note" id="level2CodeHint" style="color:#d9f2ff; text-align:center;">Find the access code to continue.</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="catch-screen hidden" id="gateScreen">
-        <div class="catch-card">
-          <div class="catch-head">
-            <h2 class="catch-title">LEVEL 2 LOCKED</h2>
-            <div class="catch-mini">Enter access code</div>
-          </div>
-
-          <div style="display:grid; gap:12px; max-width:420px; margin:0 auto;">
-            <input id="level2CodeInput" type="text" placeholder="ENTER CODE" style="width:100%; padding:14px; border:4px solid var(--panel-border); font:inherit; text-transform:uppercase; text-align:center; font-weight:bold; color:var(--text);">
-            <button class="result-btn primary" id="unlockLevel2Btn">Unlock Level 2</button>
-            <div class="small-note" id="level2CodeHint" style="color:#d9f2ff; text-align:center;">Find the access code to continue.</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="catch-screen hidden" id="gateScreen">
-        <div class="catch-card">
-          <div class="catch-head">
-            <h2 class="catch-title">LEVEL 2 LOCKED</h2>
-            <div class="catch-mini">Enter access code</div>
-          </div>
-
-          <div style="display:grid; gap:12px; max-width:420px; margin:0 auto;">
-            <input id="level2CodeInput" type="text" placeholder="ENTER CODE" style="width:100%; padding:14px; border:4px solid var(--panel-border); font:inherit; text-transform:uppercase; text-align:center; font-weight:bold; color:var(--text);">
-            <button class="result-btn primary" id="unlockLevel2Btn">Unlock Level 2</button>
-            <div class="small-note" id="level2CodeHint" style="color:#d9f2ff; text-align:center;">Find the access code to continue.</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="catch-screen hidden" id="gateScreen">
-        <div class="catch-card">
-          <div class="catch-head">
-            <h2 class="catch-title">LEVEL 2 LOCKED</h2>
-            <div class="catch-mini">Enter access code</div>
-          </div>
-
-          <div style="display:grid; gap:12px; max-width:420px; margin:0 auto;">
-            <input id="level2CodeInput" type="text" placeholder="ENTER CODE" style="width:100%; padding:14px; border:4px solid var(--panel-border); font:inherit; text-transform:uppercase; text-align:center; font-weight:bold; color:var(--text);">
-            <button class="result-btn primary" id="unlockLevel2Btn">Unlock Level 2</button>
-            <div class="small-note" id="level2CodeHint" style="color:#d9f2ff; text-align:center;">Find the access code to continue.</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="catch-screen hidden" id="gateScreen">
-        <div class="catch-card">
-          <div class="catch-head">
-            <h2 class="catch-title">LEVEL 2 LOCKED</h2>
-            <div class="catch-mini">Enter access code</div>
-          </div>
-
-          <div style="display:grid; gap:12px; max-width:420px; margin:0 auto;">
-            <input id="level2CodeInput" type="text" placeholder="ENTER CODE" style="width:100%; padding:14px; border:4px solid var(--panel-border); font:inherit; text-transform:uppercase; text-align:center; font-weight:bold; color:var(--text);">
-            <button class="result-btn primary" id="unlockLevel2Btn">Unlock Level 2</button>
-            <div class="small-note" id="level2CodeHint" style="color:#d9f2ff; text-align:center;">Find the access code to continue.</div>
-          </div>
-        </div>
-      </section>
-
       <section class="catch-screen hidden" id="catchScreen">
         <div class="catch-card">
           <div class="catch-head">
@@ -1110,55 +924,46 @@
         </div>
       </section>
 
-      <section class="result-screen hidden" id="passportScreen">
+      <section class="result-screen hidden" id="resultScreen">
         <div class="result-card">
           <div class="result-top">
             <div class="result-icon">🏆</div>
             <div>
-              <h2 class="result-main-title">SUMMER PASSPORT</h2>
-              <div id="passportSubtitle">Collect booth trophies.</div>
-            </div>
-          </div>
-
-          <div class="result-grid" id="passportGrid">
-          </div>
-
-          <div style="display:grid; gap:10px; max-width:420px; margin:6px auto 0;">
-            <input id="boothCodeInput" type="text" placeholder="ENTER BOOTH CODE" style="width:100%; padding:14px; border:4px solid var(--panel-border); font:inherit; text-transform:uppercase; text-align:center; font-weight:bold; color:var(--text);">
-            <button class="result-btn primary" id="submitBoothCodeBtn">Submit Code</button>
-            <div class="small-note" id="passportProgressText" style="text-align:center; color:#d9f2ff;">0 / 4 trophies</div>
-          </div>
-        <div class="result-card">
-          <div class="result-top">
-            <div class="result-icon">🌴</div>
-            <div>
               <h2 class="result-main-title">STAY TUNED</h2>
-              <div id="resultSubtitle">Level 2 coming soon.</div>
+              <div id="resultSubtitle">Level 2 starts on 10 May 2026.</div>
+              <div class="passport-id">PASSPORT ID: <span id="passportIdText">SA-000000</span></div>
             </div>
           </div>
 
           <div class="result-grid">
-            <div class="result-box">
-              <small>Mission</small>
-              <strong>Mission 1 Complete</strong>
+            <div class="result-box trophy-box" id="trophySun">
+              <small>Trophy 1</small>
+              <div class="trophy-icon">☀️</div>
+              <strong>Sun Trophy</strong>
+              <div class="trophy-lock" id="trophySunText">Locked • Find this code at the booth</div>
+            </div>
+            <div class="result-box trophy-box" id="trophyWave">
+              <small>Trophy 2</small>
+              <div class="trophy-icon">🌊</div>
+              <strong>Wave Trophy</strong>
+              <div class="trophy-lock" id="trophyWaveText">Locked • Find this code at the booth</div>
+            </div>
+            <div class="result-box trophy-box" id="trophyIce">
+              <small>Trophy 3</small>
+              <div class="trophy-icon">🍦</div>
+              <strong>Ice Trophy</strong>
+              <div class="trophy-lock" id="trophyIceText">Locked • Find this code at the booth</div>
             </div>
             <div class="result-box">
-              <small>Player</small>
-              <strong id="resultPlayer">P-0000</strong>
-            </div>
-            <div class="result-box">
-              <small>Score</small>
-              <strong id="resultScore">000</strong>
-            </div>
-            <div class="result-box">
-              <small>Code</small>
-              <strong>20260510</strong>
+              <small>Status</small>
+              <strong id="trophyStatus">Enter all codes</strong>
             </div>
           </div>
 
-          <div class="result-actions">
-            <button class="result-btn primary" id="playAgainBtn">Play Again</button>
-            <button class="result-btn" id="backToStartBtn">Back</button>
+          <div style="display:grid; gap:10px; max-width:420px; margin:10px auto 0;">
+            <input id="trophyInput" type="text" placeholder="ENTER TROPHY CODE" style="width:100%; padding:12px; border:4px solid var(--panel-border); text-align:center;">
+            <button class="result-btn" id="addTrophyBtn">Add Trophy</button>
+            <button class="result-btn primary hidden" id="claimBtn">Open Form</button>
           </div>
         </div>
       </section>
@@ -1171,10 +976,10 @@
 
   <script>
     const items = [
-      { icon: '🕶️', name: 'Sun Glasses', tag: 'Cool', desc: 'Bright shield.', preview: 'Cool shield for mission 1.', cool: 8, fun: 6, chill: 9 },
-      { icon: '🍦', name: 'Ice Cream', tag: 'Sweet', desc: 'Quick boost.', preview: 'Sweet boost for mission 1.', cool: 6, fun: 10, chill: 8 },
-      { icon: '🏖️', name: 'Beach Ball', tag: 'Fun', desc: 'Party pick.', preview: 'High fun for mission 1.', cool: 7, fun: 9, chill: 5 },
-      { icon: '🌊', name: 'Ocean Waves', tag: 'Chill', desc: 'Calm flow.', preview: 'Smooth mood for mission 1.', cool: 5, fun: 7, chill: 10 }
+      { icon: '🕶️', name: 'Sun Glasses', tag: 'Cool', desc: 'Bright shield.', preview: '20260510 → 10 / 05 → summer starts with a clue.', cool: 8, fun: 6, chill: 9 },
+      { icon: '🍦', name: 'Ice Cream', tag: 'Sweet', desc: 'Quick boost.', preview: '05 + 10 = a date. Why does summer keep pointing there?', cool: 6, fun: 10, chill: 8 },
+      { icon: '🏖️', name: 'Beach Ball', tag: 'Fun', desc: 'Party pick.', preview: 'A beach game, a bright day, and a hidden code: 20260510.', cool: 7, fun: 9, chill: 5 },
+      { icon: '🌊', name: 'Ocean Waves', tag: 'Chill', desc: 'Calm flow.', preview: 'Waves, sun, sand... and one date that keeps returning.', cool: 5, fun: 7, chill: 10 }
     ];
 
     const catchIcons = ['🍦','🏖️','🌊','🌴','🕶️','🐚'];
@@ -1190,6 +995,14 @@
     let catchSpawner = null;
     let countdownTimer = null;
     let toastTimer = null;
+    let passportId = '';
+    const level2AccessCode = 'ITFAIR2026';
+    const trophyMap = {
+      'SUN123': 'sun',
+      'WAVE456': 'wave',
+      'ICE789': 'ice'
+    };
+    let collected = [];
 
     const el = {
       hud: document.getElementById('hud'),
@@ -1235,8 +1048,23 @@
       resultPlayer: document.getElementById('resultPlayer'),
       resultScore: document.getElementById('resultScore'),
       resultSubtitle: document.getElementById('resultSubtitle'),
+      passportIdText: document.getElementById('passportIdText'),
+      passportIdText2: document.getElementById('passportIdText2'),
+      passportIdText3: document.getElementById('passportIdText3'),
+      nextBtn: document.getElementById('nextBtn'),
+      level2InfoScreen: document.getElementById('level2InfoScreen'),
+      level2Screen: document.getElementById('level2Screen'),
+      level2CodeInput: document.getElementById('level2CodeInput'),
+      unlockLevel2Btn: document.getElementById('unlockLevel2Btn'),
+      level2HintText: document.getElementById('level2HintText'),
       playAgainBtn: document.getElementById('playAgainBtn'),
-      backToStartBtn: document.getElementById('backToStartBtn')
+      backToStartBtn: document.getElementById('backToStartBtn'),
+      trophySun: document.getElementById('trophySun'),
+      trophyWave: document.getElementById('trophyWave'),
+      trophyIce: document.getElementById('trophyIce'),
+      trophySunText: document.getElementById('trophySunText'),
+      trophyWaveText: document.getElementById('trophyWaveText'),
+      trophyIceText: document.getElementById('trophyIceText')
     };
 
     function currentItem() {
@@ -1251,6 +1079,16 @@
       return 'P-' + Math.floor(1000 + Math.random() * 9000);
     }
 
+    function generatePassportId() {
+      const existing = localStorage.getItem('summerPassportId');
+      if (existing) return existing;
+      const part1 = Math.floor(100000 + Math.random() * 900000);
+      const part2 = Math.floor(100000 + Math.random() * 900000);
+      const newId = `SA-${part1}-${part2}`;
+      localStorage.setItem('summerPassportId', newId);
+      return newId;
+    }
+
     function rankFromScore(total) {
       if (total >= 140) return ranks[3];
       if (total >= 90) return ranks[2];
@@ -1261,7 +1099,7 @@
     function updateHud() {
       el.hudPlayer.textContent = playerId || 'P-0000';
       el.hudScore.textContent = padScore(score);
-      el.hudLevel.textContent = confirmed ? '02' : '01';
+      el.hudLevel.textContent = '01';
       el.hudStatus.textContent = confirmed ? 'Mission' : 'Ready';
       el.playerRank.textContent = rankFromScore(score);
     }
@@ -1292,7 +1130,7 @@
       el.mainName.textContent = current.name;
       el.mainTag.textContent = current.tag;
       el.mainDesc.textContent = current.desc;
-      el.previewText.textContent = current.preview;
+      el.previewText.textContent = 'Code: 20260510';
       el.dialogText.textContent = `Selected: ${current.name}.`;
       el.itemCounter.textContent = `${index + 1} / ${items.length}`;
       el.coolVal.textContent = current.cool;
@@ -1327,14 +1165,13 @@
       if (!started || confirmed) return;
       if (direction === 'right') index = (index + 1) % items.length;
       else index = (index - 1 + items.length) % items.length;
-      score += 2;
       updateSelectionView();
     }
 
     function previewItem() {
       if (!started || confirmed) return;
       const current = currentItem();
-      el.dialogText.textContent = current.preview;
+      el.dialogText.textContent = 'Hint: ' + current.preview;
       showToast('Quick info');
       flashScreen();
     }
@@ -1342,18 +1179,16 @@
     function startMissionCountdown() {
       let count = 3;
       clearInterval(countdownTimer);
-      el.countdown.textContent = count;
-      el.dialogText.textContent = 'Mission 1 starting soon...';
+      el.dialogText.textContent = 'Mission 1 starting soon... ' + count;
       flashScreen();
 
       countdownTimer = setInterval(() => {
         count -= 1;
+
         if (count > 0) {
-          el.countdown.textContent = count;
-          el.dialogText.textContent = 'Mission 1 starting soon...';
+          el.dialogText.textContent = 'Mission 1 starting soon... ' + count;
           flashScreen();
         } else if (count === 0) {
-          el.countdown.textContent = 'GO';
           el.dialogText.textContent = 'Mission 1 start';
           flashScreen();
         } else {
@@ -1393,10 +1228,276 @@
 
       catchSpawner = setInterval(() => {
         spawnCatchObject();
-      }, 520);
+      }, 400);
 
       catchTimer = setInterval(() => {
         timeLeft -= 1;
         el.catchTime.textContent = timeLeft;
         if (timeLeft <= 0) finishCatchGame();
-      }, 1
+      }, 1000);
+    }
+
+    function spawnCatchObject() {
+      const obj = document.createElement('div');
+      obj.className = 'catch-object';
+      obj.textContent = catchIcons[Math.floor(Math.random() * catchIcons.length)];
+      obj.style.left = Math.random() * 88 + '%';
+      obj.style.top = '-10px';
+      el.catchArea.appendChild(obj);
+
+      let caught = false;
+
+      const fall = setInterval(() => {
+        if (!obj.isConnected || caught) {
+          clearInterval(fall);
+          return;
+        }
+        obj.style.top = (obj.offsetTop + 7) + 'px';
+        if (obj.offsetTop > el.catchArea.clientHeight) {
+          obj.remove();
+          clearInterval(fall);
+        }
+      }, 30);
+
+      obj.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (caught) return;
+        caught = true;
+        clearInterval(fall);
+        catchHits += 1;
+        score += 10;
+        el.catchHits.textContent = catchHits;
+        updateHud();
+        obj.remove();
+      }, { once: true });
+    }
+
+    function finishCatchGame() {
+      clearInterval(catchTimer);
+      clearInterval(catchSpawner);
+      el.catchArea.innerHTML = '';
+      showResult();
+    }
+
+    function showResult() {
+      el.catchScreen.classList.add('hidden');
+      el.resultScreen.classList.remove('hidden');
+      el.resultPlayer.textContent = playerId;
+      el.resultScore.textContent = padScore(score);
+      el.passportIdText.textContent = passportId;
+      el.resultSubtitle.textContent = 'Level 2 starts on 10 May 2026.';
+      updateHud();
+      flashScreen();
+    }
+
+    function openLevel2Info() {
+      el.resultScreen.classList.add('hidden');
+      el.level2InfoScreen.classList.remove('hidden');
+      el.passportIdText2.textContent = passportId;
+      el.level2CodeInput.value = '';
+      el.level2HintText.textContent = 'Waiting for the release code.';
+      flashScreen();
+    }
+
+    function renderTrophies() {
+      const hasSun = collected.includes('SUN123');
+      const hasWave = collected.includes('WAVE456');
+      const hasIce = collected.includes('ICE789');
+
+      el.trophySun.classList.toggle('unlocked', hasSun);
+      el.trophyWave.classList.toggle('unlocked', hasWave);
+      el.trophyIce.classList.toggle('unlocked', hasIce);
+
+      el.trophySunText.textContent = hasSun ? 'Unlocked' : 'Locked • Find this code at the booth';
+      el.trophyWaveText.textContent = hasWave ? 'Unlocked' : 'Locked • Find this code at the booth';
+      el.trophyIceText.textContent = hasIce ? 'Unlocked' : 'Locked • Find this code at the booth';
+
+      el.trophyStatus.textContent = `${collected.length}/3 collected`;
+
+      if (collected.length === 3) {
+        document.getElementById('claimBtn').classList.remove('hidden');
+      } else {
+        document.getElementById('claimBtn').classList.add('hidden');
+      }
+    }
+
+    function unlockLevel2() {
+      const entered = el.level2CodeInput.value.trim().toUpperCase();
+      if (entered !== level2AccessCode) {
+        el.level2HintText.textContent = 'Wrong code. Check KSU_IT on X.';
+        showToast('Wrong code');
+        return;
+      }
+
+      el.level2InfoScreen.classList.add('hidden');
+      el.level2Screen.classList.remove('hidden');
+      el.passportIdText3.textContent = passportId;
+      renderTrophies();
+      showToast('Level 2 unlocked');
+      document.getElementById('trophyInput').value = '';
+      flashScreen();
+    }
+
+    function addTrophy() {
+      const code = document.getElementById('trophyInput').value.trim().toUpperCase();
+      if (!trophyMap[code]) {
+        showToast('Invalid code');
+        return;
+      }
+      if (!collected.includes(code)) {
+        collected.push(code);
+        showToast('Trophy added');
+      } else {
+        showToast('Already added');
+      }
+
+      document.getElementById('trophyInput').value = '';
+      renderTrophies();
+
+      if (collected.length === 3) {
+        showToast('All trophies collected!');
+      }
+    }
+
+      el.level2InfoScreen.classList.add('hidden');
+      el.level2Screen.classList.remove('hidden');
+      el.passportIdText3.textContent = passportId;
+      showToast('Level 2 unlocked');
+      flashScreen();
+    }
+
+    function goToSelection() {
+      started = true;
+      confirmed = false;
+      clearInterval(countdownTimer);
+      clearInterval(catchTimer);
+      clearInterval(catchSpawner);
+      if (!playerId) playerId = generatePlayerId();
+      el.playerId.textContent = playerId;
+      el.startScreen.classList.add('hidden');
+      el.catchScreen.classList.add('hidden');
+      el.resultScreen.classList.add('hidden');
+      el.level2InfoScreen.classList.add('hidden');
+      el.level2Screen.classList.add('hidden');
+      el.selectScreen.classList.remove('hidden');
+      el.hud.classList.remove('hidden');
+      el.dialogText.textContent = 'Find the pattern. 20260510.';
+      updateSelectionView();
+    }
+
+    function resetGame(toStart = false) {
+      clearInterval(countdownTimer);
+      clearInterval(catchTimer);
+      clearInterval(catchSpawner);
+      index = 0;
+      score = 0;
+      catchHits = 0;
+      confirmed = false;
+      playerId = generatePlayerId();
+      passportId = generatePassportId();
+      el.playerId.textContent = playerId;
+      updateHud();
+      updateSelectionView();
+
+      if (toStart) {
+        started = false;
+        el.hud.classList.add('hidden');
+        el.selectScreen.classList.add('hidden');
+        el.catchScreen.classList.add('hidden');
+        el.resultScreen.classList.add('hidden');
+        el.level2InfoScreen.classList.add('hidden');
+        el.level2Screen.classList.add('hidden');
+        el.startScreen.classList.remove('hidden');
+      } else {
+        goToSelection();
+      }
+    }
+
+    function handleKeydown(e) {
+      if (!started) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          goToSelection();
+        }
+        return;
+      }
+
+      if (!el.selectScreen.classList.contains('hidden')) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); move('right'); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); move('left'); }
+        if (e.key.toLowerCase() === 'i') { e.preventDefault(); previewItem(); }
+        if (e.key === 'Enter') { e.preventDefault(); confirmSelection(); }
+      }
+
+      if (!el.resultScreen.classList.contains('hidden') && e.key.toLowerCase() === 'r') {
+        e.preventDefault();
+        resetGame(false);
+      }
+    }
+
+    function initAmbientEffects() {
+      const root = document.getElementById('gameRoot');
+      for (let i = 0; i < 8; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.textContent = '✦';
+        sparkle.style.left = Math.random() * 100 + '%';
+        sparkle.style.top = 8 + Math.random() * 42 + '%';
+        sparkle.style.animationDuration = (6 + Math.random() * 5) + 's';
+        sparkle.style.animationDelay = (Math.random() * 6) + 's';
+        root.appendChild(sparkle);
+      }
+      for (let i = 0; i < 8; i++) {
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        bubble.textContent = '○';
+        bubble.style.left = Math.random() * 100 + '%';
+        bubble.style.bottom = 92 + Math.random() * 80 + 'px';
+        bubble.style.animationDuration = (5 + Math.random() * 4) + 's';
+        bubble.style.animationDelay = (Math.random() * 5) + 's';
+        root.appendChild(bubble);
+      }
+    }
+
+    function updateExpoCountdown() {
+      const target = new Date('2026-05-10T00:00:00').getTime();
+      const now = new Date().getTime();
+      const diff = target - now;
+
+      if (diff <= 0) {
+        el.countdown.textContent = '00d 00h 00m';
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+
+      el.countdown.textContent = `${days}d ${hours}h ${minutes}m`;
+    }
+
+    el.startBtn.addEventListener('click', goToSelection);
+    el.leftBtn.addEventListener('click', () => move('left'));
+    el.rightBtn.addEventListener('click', () => move('right'));
+    el.previewBtn.addEventListener('click', previewItem);
+    el.confirmBtn.addEventListener('click', confirmSelection);
+    el.playAgainBtn.addEventListener('click', () => resetGame(false));
+    el.nextBtn.addEventListener('click', openLevel2Info);
+    el.unlockLevel2Btn.addEventListener('click', unlockLevel2);
+    document.getElementById('addTrophyBtn').addEventListener('click', addTrophy);
+    document.getElementById('claimBtn').addEventListener('click', () => {
+      window.open('https://forms.gle/REPLACE_WITH_YOUR_FORM_LINK', '_blank');
+    });
+    el.backToStartBtn.addEventListener('click', () => resetGame(true));
+    document.addEventListener('keydown', handleKeydown);
+
+    initAmbientEffects();
+    passportId = generatePassportId();
+    renderTrophies();
+    updateExpoCountdown();
+    setInterval(updateExpoCountdown, 60000);
+    resetGame(true);
+  </script>
+</body>
+</html>
