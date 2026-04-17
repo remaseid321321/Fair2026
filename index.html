@@ -7,12 +7,12 @@
   <style>
     :root {
       --sky-top: #7fd8ff;
-      --sky-bottom: #e9fbff;
-      --sea: #0f73b7;
-      --sea-dark: #0a4f86;
+      --sky-bottom: #eafcff;
+      --sea: #1176b9;
+      --sea-dark: #0a5389;
       --sand: #f4d8a5;
       --sun: #ffd84b;
-      --panel: rgba(249, 244, 255, 0.94);
+      --panel: rgba(249, 244, 255, 0.95);
       --panel-border: #1a1635;
       --dark: #171233;
       --dark-2: #241b4f;
@@ -23,7 +23,7 @@
       --accent: #ff58ab;
       --accent-2: #45f0ff;
       --accent-3: #9cff69;
-      --shadow: rgba(0,0,0,0.16);
+      --shadow: rgba(0, 0, 0, 0.16);
     }
 
     * { box-sizing: border-box; }
@@ -34,7 +34,6 @@
       background: #0c2440;
       color: var(--white);
     }
-
     body { overflow: hidden; }
     button, input { font: inherit; }
 
@@ -84,9 +83,9 @@
 
     .palm {
       position: absolute;
-      left: 26px;
+      left: 24px;
       bottom: 94px;
-      font-size: 86px;
+      font-size: 82px;
       filter: drop-shadow(0 8px 0 rgba(0,0,0,0.14));
       animation: sway 3.8s ease-in-out infinite;
       transform-origin: bottom center;
@@ -95,9 +94,9 @@
 
     .island {
       position: absolute;
-      right: 128px;
+      right: 120px;
       bottom: 116px;
-      font-size: 54px;
+      font-size: 50px;
       filter: drop-shadow(0 8px 0 rgba(0,0,0,0.12));
       animation: float 4.2s ease-in-out infinite;
       user-select: none;
@@ -127,16 +126,15 @@
       position: absolute;
       inset: 0;
       pointer-events: none;
-      background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.04) 1px, transparent 1px, transparent 4px);
+      background: repeating-linear-gradient(to bottom, rgba(0,0,0,.04), rgba(0,0,0,.04) 1px, transparent 1px, transparent 4px);
       mix-blend-mode: multiply;
       z-index: 40;
     }
-
     .crt {
       position: absolute;
       inset: 0;
       pointer-events: none;
-      background: radial-gradient(circle at center, transparent 58%, rgba(0,0,0,0.18) 100%);
+      background: radial-gradient(circle at center, transparent 58%, rgba(0,0,0,.18) 100%);
       z-index: 39;
     }
 
@@ -151,7 +149,6 @@
       gap: 10px;
       z-index: 12;
     }
-
     .hud-item {
       background: rgba(17, 13, 35, 0.72);
       padding: 8px 12px;
@@ -161,7 +158,6 @@
       justify-content: center;
       backdrop-filter: blur(2px);
     }
-
     .hud-label {
       font-size: 10px;
       color: #cfe8ff;
@@ -169,7 +165,6 @@
       margin-bottom: 3px;
       text-transform: uppercase;
     }
-
     .hud-value {
       font-size: 20px;
       color: var(--warning);
@@ -186,24 +181,23 @@
       justify-content: center;
       z-index: 10;
     }
-
     .hidden { display: none !important; }
 
-    .start-screen, .result-screen, .catch-screen {
-      width: min(780px, 94vw);
+    .start-screen, .select-screen, .catch-screen, .result-screen {
+      width: min(820px, 96vw);
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
-    .start-card, .result-card, .catch-card, .panel, .command-btn, .main-card, .side-card, .dialog-box, .result-box, .result-btn {
+    .card, .panel, .main-card, .side-card, .command-btn, .result-btn, .dialog-box, .result-box, .catch-area {
       border: 4px solid var(--panel-border);
       box-shadow: 0 8px 0 var(--shadow);
     }
 
-    .start-card, .result-card, .catch-card {
+    .card {
       width: 100%;
-      background: rgba(17, 13, 35, 0.9);
+      background: rgba(17, 13, 35, 0.92);
       padding: 26px;
       text-align: center;
     }
@@ -216,7 +210,6 @@
       color: var(--warning);
       text-shadow: 4px 4px 0 rgba(0,0,0,.24);
     }
-
     .subtitle {
       margin: 14px auto 0;
       max-width: 520px;
@@ -224,7 +217,6 @@
       font-size: 14px;
       line-height: 1.65;
     }
-
     .blinking {
       display: inline-block;
       margin-top: 18px;
@@ -233,7 +225,7 @@
       animation: blink 1s step-start infinite;
     }
 
-    .select-screen {
+    .select-layout {
       width: min(980px, 100%);
       height: min(650px, calc(100vh - 106px));
       display: grid;
@@ -249,14 +241,12 @@
       overflow: hidden;
       position: relative;
     }
-
     .select-stage {
       display: grid;
       grid-template-rows: auto minmax(0, 1fr) auto;
       gap: 10px;
       min-height: 0;
     }
-
     .panel-header {
       display: flex;
       align-items: center;
@@ -267,7 +257,6 @@
       text-transform: uppercase;
       color: #403769;
     }
-
     .status-pill {
       border: 3px solid var(--panel-border);
       padding: 4px 8px;
@@ -283,7 +272,6 @@
       align-items: center;
       min-height: 0;
     }
-
     .side-card, .main-card {
       background: linear-gradient(180deg, #ffffff, #eee6ff);
       display: flex;
@@ -292,7 +280,6 @@
       justify-content: center;
       box-shadow: inset 0 0 0 4px rgba(255,255,255,.45);
     }
-
     .side-card {
       height: 190px;
       opacity: .22;
@@ -300,27 +287,22 @@
       box-shadow: none;
       background: rgba(255,255,255,.22);
     }
-
     .main-card {
       height: 270px;
       padding: 14px;
       transition: transform .18s ease;
     }
-
     .main-card.pop { animation: popCard .2s ease; }
-
     .icon {
       line-height: 1;
       user-select: none;
       filter: drop-shadow(0 7px 0 rgba(0,0,0,.1));
     }
-
     .side-card .icon { font-size: 42px; }
     .main-card .icon {
       font-size: clamp(60px, 8vw, 84px);
       animation: bob 2.2s ease-in-out infinite;
     }
-
     .item-name {
       margin-top: 10px;
       font-size: clamp(18px, 2vw, 24px);
@@ -328,7 +310,6 @@
       letter-spacing: 1.5px;
       text-align: center;
     }
-
     .item-tag {
       margin-top: 8px;
       display: inline-block;
@@ -339,7 +320,6 @@
       font-weight: bold;
       text-transform: uppercase;
     }
-
     .item-desc {
       margin-top: 10px;
       max-width: 320px;
@@ -349,14 +329,12 @@
       line-height: 1.45;
       color: var(--muted);
     }
-
     .stats {
       width: min(100%, 300px);
       margin-top: 10px;
       display: grid;
       gap: 6px;
     }
-
     .stat {
       display: grid;
       grid-template-columns: 54px 1fr 28px;
@@ -366,7 +344,6 @@
       font-weight: bold;
       color: #3f3567;
     }
-
     .bar {
       position: relative;
       height: 12px;
@@ -374,7 +351,6 @@
       background: #fff;
       overflow: hidden;
     }
-
     .bar-fill {
       position: absolute;
       inset: 0 auto 0 0;
@@ -388,7 +364,6 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 8px;
     }
-
     .command-btn {
       min-height: 56px;
       background: var(--dark-2);
@@ -398,19 +373,13 @@
       cursor: pointer;
       transition: transform .12s ease, background .2s ease;
     }
-
-    .command-btn:hover, .command-btn.active {
-      background: #382d6f;
-      transform: translateY(-2px);
-    }
-
+    .command-btn:hover { background: #382d6f; transform: translateY(-2px); }
     .command-btn strong {
       display: block;
       margin-bottom: 4px;
       font-size: 15px;
       color: var(--warning);
     }
-
     .command-btn span {
       font-size: 10px;
       line-height: 1.35;
@@ -422,7 +391,6 @@
       grid-template-rows: auto auto 1fr;
       gap: 12px;
     }
-
     .mini-panel-title {
       font-size: 13px;
       font-weight: bold;
@@ -430,29 +398,24 @@
       text-transform: uppercase;
       color: #382f62;
     }
-
     .dots {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
     }
-
     .dot {
       width: 16px;
       height: 16px;
       background: #fff;
       border: 3px solid var(--panel-border);
     }
-
     .dot.active { background: var(--accent); }
-
     .small-note {
       margin-top: 8px;
       font-size: 11px;
       line-height: 1.6;
       color: #534c77;
     }
-
     .dialog-box {
       background: var(--dark);
       color: #eef5ff;
@@ -463,21 +426,18 @@
       gap: 10px;
       min-height: 144px;
     }
-
     .dialog-title {
       color: var(--warning);
       font-size: 14px;
       text-transform: uppercase;
       margin-bottom: 6px;
     }
-
     .dialog-text {
       min-height: 44px;
       line-height: 1.5;
       font-size: 12px;
       color: #eef5ff;
     }
-
     .player-box {
       border: 3px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.04);
@@ -487,13 +447,11 @@
       font-size: 12px;
       color: #d8f4ff;
     }
-
     .label-value {
       display: flex;
       justify-content: space-between;
       gap: 10px;
     }
-
     .countdown {
       color: var(--accent-2);
       min-height: 22px;
@@ -506,7 +464,6 @@
       gap: 14px;
       width: min(820px, 96vw);
     }
-
     .catch-head {
       display: flex;
       justify-content: space-between;
@@ -515,19 +472,16 @@
       flex-wrap: wrap;
       color: #fff;
     }
-
     .catch-title {
       font-size: clamp(24px, 3vw, 34px);
       color: var(--warning);
       margin: 0;
       letter-spacing: 1px;
     }
-
     .catch-mini {
       font-size: 12px;
       color: #d9f2ff;
     }
-
     .catch-hud {
       display: flex;
       justify-content: center;
@@ -536,16 +490,13 @@
       font-size: 14px;
       color: #fff9cf;
     }
-
     .catch-area {
       position: relative;
       height: min(420px, 56vh);
       background: linear-gradient(to bottom, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      border: 4px solid var(--panel-border);
       overflow: hidden;
       cursor: crosshair;
     }
-
     .catch-object {
       position: absolute;
       font-size: 44px;
@@ -557,120 +508,9 @@
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
     }
-
     @media (hover: hover) and (pointer: fine) {
       .catch-object:hover { transform: scale(1.08); }
     }
-
-    .result-card {
-      display: grid;
-      gap: 14px;
-      color: #fff;
-    }
-
-    .result-top {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .result-icon {
-      font-size: 84px;
-      animation: bob 2.2s ease-in-out infinite;
-    }
-
-    .result-main-title {
-      margin: 0;
-      font-size: clamp(26px, 4vw, 40px);
-      color: var(--warning);
-      letter-spacing: 2px;
-    }
-
-    .result-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(180px, 1fr));
-      gap: 12px;
-    }
-
-    .result-box {
-      background: rgba(255,255,255,.05);
-      padding: 14px;
-      min-height: 76px;
-      text-align: left;
-    }
-
-    .trophy-box {
-      position: relative;
-      min-height: 150px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      text-align: center;
-    }
-
-    .trophy-icon {
-      font-size: 56px;
-      opacity: .25;
-      filter: grayscale(1);
-      transition: transform .2s ease, opacity .2s ease, filter .2s ease;
-    }
-
-    .trophy-box.unlocked .trophy-icon {
-      opacity: 1;
-      filter: grayscale(0);
-      transform: scale(1.06);
-    }
-
-    .trophy-lock {
-      font-size: 12px;
-      color: #b9dbff;
-      text-transform: uppercase;
-    }
-
-    .trophy-box.unlocked .trophy-lock {
-      color: #9cff69;
-    }
-
-    .result-box small {
-      display: block;
-      color: #b9dbff;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      font-size: 10px;
-    }
-
-    .result-box strong {
-      font-size: 16px;
-      line-height: 1.45;
-      color: #fff7c8;
-      text-transform: uppercase;
-    }
-
-    .result-actions {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .result-btn {
-      min-width: 170px;
-      background: #31265f;
-      color: #fff;
-      padding: 12px 14px;
-      cursor: pointer;
-      font-weight: bold;
-      text-transform: uppercase;
-      transition: transform .12s ease, background .2s ease;
-    }
-
-    .result-btn:hover { transform: translateY(-2px); background: #46387f; }
-    .result-btn.primary { background: #007f9c; }
-    .result-btn.primary:hover { background: #0e97b6; }
 
     .passport-id {
       display: inline-block;
@@ -683,6 +523,99 @@
       letter-spacing: 1px;
     }
 
+    .result-card {
+      display: grid;
+      gap: 14px;
+      color: #fff;
+    }
+    .result-top {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .result-icon {
+      font-size: 84px;
+      animation: bob 2.2s ease-in-out infinite;
+    }
+    .result-main-title {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 40px);
+      color: var(--warning);
+      letter-spacing: 2px;
+    }
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    .result-box {
+      background: rgba(255,255,255,.05);
+      padding: 14px;
+      min-height: 76px;
+      text-align: left;
+    }
+    .result-box small {
+      display: block;
+      color: #b9dbff;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      font-size: 10px;
+    }
+    .result-box strong {
+      font-size: 16px;
+      line-height: 1.45;
+      color: #fff7c8;
+      text-transform: uppercase;
+    }
+    .result-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .result-btn {
+      min-width: 170px;
+      background: #31265f;
+      color: #fff;
+      padding: 12px 14px;
+      cursor: pointer;
+      font-weight: bold;
+      text-transform: uppercase;
+      transition: transform .12s ease, background .2s ease;
+    }
+    .result-btn:hover { transform: translateY(-2px); background: #46387f; }
+    .result-btn.primary { background: #007f9c; }
+    .result-btn.primary:hover { background: #0e97b6; }
+
+    .trophy-box {
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-align: center;
+    }
+    .trophy-icon {
+      font-size: 56px;
+      opacity: .25;
+      filter: grayscale(1);
+      transition: transform .2s ease, opacity .2s ease, filter .2s ease;
+    }
+    .trophy-box.unlocked .trophy-icon {
+      opacity: 1;
+      filter: grayscale(0);
+      transform: scale(1.06);
+    }
+    .trophy-lock {
+      font-size: 12px;
+      color: #b9dbff;
+      text-transform: uppercase;
+    }
+    .trophy-box.unlocked .trophy-lock { color: #9cff69; }
+
     .flash-overlay {
       position: absolute;
       inset: 0;
@@ -691,7 +624,6 @@
       pointer-events: none;
       z-index: 60;
     }
-
     .flash-overlay.show { animation: flashScreen .26s ease; }
 
     .toast {
@@ -711,7 +643,7 @@
     @media (max-width: 980px) {
       .hud { grid-template-columns: repeat(2, 1fr); width: calc(100vw - 18px); }
       .screen { inset: 132px 8px 8px 8px; }
-      .select-screen { grid-template-columns: 1fr; height: auto; max-height: calc(100vh - 148px); overflow: auto; }
+      .select-layout { grid-template-columns: 1fr; height: auto; max-height: calc(100vh - 148px); overflow: auto; }
     }
 
     @media (max-width: 640px) {
@@ -739,11 +671,11 @@
         min-height: auto;
         align-items: flex-start;
       }
-      .start-screen, .result-screen, .catch-screen, .select-screen { width: 100%; }
-      .start-card, .result-card, .catch-card, .panel, .dialog-box, .command-btn, .result-btn, .main-card, .side-card, .result-box { box-shadow: 0 5px 0 var(--shadow); }
-      .start-card, .result-card, .catch-card { padding: 18px 14px; }
+      .start-screen, .select-screen, .catch-screen, .result-screen { width: 100%; }
+      .card, .panel, .dialog-box, .command-btn, .result-btn, .main-card, .side-card, .result-box, .catch-area { box-shadow: 0 5px 0 var(--shadow); }
+      .card { padding: 18px 14px; }
       .subtitle, .small-note, .dialog-text, .command-btn span { font-size: 11px; }
-      .select-screen { grid-template-columns: 1fr; height: auto; max-height: none; overflow: visible; }
+      .select-layout { grid-template-columns: 1fr; height: auto; max-height: none; overflow: visible; }
       .carousel { grid-template-columns: 52px 1fr 52px; gap: 8px; }
       .side-card { height: 110px; }
       .side-card .icon { font-size: 24px; }
@@ -810,7 +742,7 @@
 
     <div class="screen">
       <section class="start-screen" id="startScreen">
-        <div class="start-card">
+        <div class="card">
           <h1 class="title">SUMMER ARCADE</h1>
           <p class="subtitle">You are selected for a summer secret mission.</p>
           <div class="blinking">PRESS START</div>
@@ -821,117 +753,131 @@
       </section>
 
       <section class="select-screen hidden" id="selectScreen">
-        <div class="panel select-stage">
-          <div class="panel-header">
-            <span>Item Select</span>
-            <span class="status-pill" id="selectState">Level 01</span>
-          </div>
-
-          <div class="carousel">
-            <div class="side-card">
-              <div class="icon" id="prevIcon">🍦</div>
+        <div class="select-layout">
+          <div class="panel select-stage">
+            <div class="panel-header">
+              <span>Item Select</span>
+              <span class="status-pill" id="selectState">Level 01</span>
             </div>
 
-            <div class="main-card" id="mainCard">
-              <div class="icon" id="mainIcon">🕶️</div>
-              <div class="item-name" id="mainName">Sun Glasses</div>
-              <div class="item-tag" id="mainTag">Cool</div>
-              <div class="item-desc" id="mainDesc">Bright shield.</div>
-              <div class="stats">
-                <div class="stat">
-                  <span>Cool</span>
-                  <div class="bar"><div class="bar-fill" id="coolBar"></div></div>
-                  <span id="coolVal">8</span>
-                </div>
-                <div class="stat">
-                  <span>Fun</span>
-                  <div class="bar"><div class="bar-fill" id="funBar"></div></div>
-                  <span id="funVal">6</span>
-                </div>
-                <div class="stat">
-                  <span>Chill</span>
-                  <div class="bar"><div class="bar-fill" id="chillBar"></div></div>
-                  <span id="chillVal">9</span>
+            <div class="carousel">
+              <div class="side-card"><div class="icon" id="prevIcon">🍦</div></div>
+              <div class="main-card" id="mainCard">
+                <div class="icon" id="mainIcon">🕶️</div>
+                <div class="item-name" id="mainName">Sun Glasses</div>
+                <div class="item-tag" id="mainTag">Cool</div>
+                <div class="item-desc" id="mainDesc">Bright shield.</div>
+                <div class="stats">
+                  <div class="stat"><span>Cool</span><div class="bar"><div class="bar-fill" id="coolBar"></div></div><span id="coolVal">8</span></div>
+                  <div class="stat"><span>Fun</span><div class="bar"><div class="bar-fill" id="funBar"></div></div><span id="funVal">6</span></div>
+                  <div class="stat"><span>Chill</span><div class="bar"><div class="bar-fill" id="chillBar"></div></div><span id="chillVal">9</span></div>
                 </div>
               </div>
+              <div class="side-card"><div class="icon" id="nextIcon">🏖️</div></div>
             </div>
 
-            <div class="side-card">
-              <div class="icon" id="nextIcon">🏖️</div>
+            <div class="commands">
+              <button class="command-btn" id="leftBtn"><strong>◀ Left</strong><span>Previous item</span></button>
+              <button class="command-btn" id="rightBtn"><strong>Right ▶</strong><span>Next item</span></button>
+              <button class="command-btn" id="previewBtn"><strong>Info</strong><span>Quick hint</span></button>
+              <button class="command-btn" id="confirmBtn"><strong>Confirm</strong><span>Start mission 1</span></button>
             </div>
           </div>
 
-          <div class="commands">
-            <button class="command-btn" id="leftBtn">
-              <strong>◀ Left</strong>
-              <span>Previous item</span>
-            </button>
-            <button class="command-btn" id="rightBtn">
-              <strong>Right ▶</strong>
-              <span>Next item</span>
-            </button>
-            <button class="command-btn" id="previewBtn">
-              <strong>Info</strong>
-              <span>Quick hint</span>
-            </button>
-            <button class="command-btn" id="confirmBtn">
-              <strong>Confirm</strong>
-              <span>Start mission 1</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="side-panel">
-          <div class="panel">
-            <div class="mini-panel-title">Progress</div>
-            <div class="dots" id="dots"></div>
-            <div class="small-note" id="itemCounter">1 / 4</div>
-          </div>
-
-          <div class="panel">
-            <div class="mini-panel-title">Info</div>
-            <div class="small-note" id="previewText">Quick item hint.</div>
-          </div>
-
-          <div class="dialog-box">
-            <div>
-              <div class="dialog-title">Console</div>
-              <div class="dialog-text" id="dialogText">Pick your summer item.</div>
+          <div class="side-panel">
+            <div class="panel">
+              <div class="mini-panel-title">Progress</div>
+              <div class="dots" id="dots"></div>
+              <div class="small-note" id="itemCounter">1 / 4</div>
             </div>
-            <div class="player-box">
-              <div class="label-value"><span>ID</span><strong id="playerId">P-0000</strong></div>
-              <div class="label-value"><span>Rank</span><strong id="playerRank">Rookie</strong></div>
-              <div class="label-value"><span>Count</span><strong class="countdown" id="countdown">--</strong></div>
+            <div class="panel">
+              <div class="mini-panel-title">Info</div>
+              <div class="small-note" id="previewText">Quick item hint.</div>
+            </div>
+            <div class="dialog-box">
+              <div>
+                <div class="dialog-title">Console</div>
+                <div class="dialog-text" id="dialogText">Pick your summer item.</div>
+              </div>
+              <div class="player-box">
+                <div class="label-value"><span>ID</span><strong id="playerId">P-0000</strong></div>
+                <div class="label-value"><span>Rank</span><strong id="playerRank">Rookie</strong></div>
+                <div class="label-value"><span>Count</span><strong class="countdown" id="countdown">--</strong></div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       <section class="catch-screen hidden" id="catchScreen">
-        <div class="catch-card">
+        <div class="card catch-card">
           <div class="catch-head">
             <h2 class="catch-title">MISSION 1</h2>
             <div class="catch-mini">Catch summer items</div>
           </div>
-
           <div class="catch-hud">
             <div>Time: <strong id="catchTime">10</strong></div>
             <div>Hits: <strong id="catchHits">0</strong></div>
             <div>Target: <strong id="catchTarget">12</strong></div>
           </div>
-
           <div class="catch-area" id="catchArea"></div>
         </div>
       </section>
 
       <section class="result-screen hidden" id="resultScreen">
-        <div class="result-card">
+        <div class="card result-card">
           <div class="result-top">
             <div class="result-icon">🏆</div>
             <div>
               <h2 class="result-main-title">STAY TUNED</h2>
               <div id="resultSubtitle">Level 2 starts on 10 May 2026.</div>
               <div class="passport-id">PASSPORT ID: <span id="passportIdText">SA-000000</span></div>
+            </div>
+          </div>
+          <div class="result-grid">
+            <div class="result-box"><small>Mission</small><strong>Mission 1 Complete</strong></div>
+            <div class="result-box"><small>Player</small><strong id="resultPlayer">P-0000</strong></div>
+            <div class="result-box"><small>Score</small><strong id="resultScore">000</strong></div>
+            <div class="result-box"><small>Level 2</small><strong>Wait for 20260510</strong></div>
+          </div>
+          <div class="result-actions">
+            <button class="result-btn primary" id="playAgainBtn">Play Again</button>
+            <button class="result-btn" id="nextBtn">Next</button>
+            <button class="result-btn" id="backToStartBtn">Back</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="result-screen hidden" id="level2InfoScreen">
+        <div class="card result-card">
+          <div class="result-top">
+            <div class="result-icon">🔐</div>
+            <div>
+              <h2 class="result-main-title">LEVEL 2</h2>
+              <div>Wait for 10 May 2026</div>
+              <div class="passport-id">PASSPORT ID: <span id="passportIdText2">SA-000000</span></div>
+            </div>
+          </div>
+          <div class="result-box" style="text-align:center;">
+            <small>Next Step</small>
+            <strong>Level 2 will begin on 10 May 2026.<br>To continue the missions, wait for that date and enter the code released then.<br>Code will be posted on KSU_IT on X.</strong>
+          </div>
+          <div style="display:grid; gap:10px; max-width:420px; margin:6px auto 0;">
+            <input id="level2CodeInput" type="text" placeholder="ENTER LEVEL 2 CODE" style="width:100%; padding:14px; border:4px solid var(--panel-border); font:inherit; text-transform:uppercase; text-align:center; font-weight:bold; color:var(--text);">
+            <button class="result-btn primary" id="unlockLevel2Btn">Unlock Level 2</button>
+            <div class="small-note" id="level2HintText" style="text-align:center; color:#d9f2ff;">Waiting for the release code.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="result-screen hidden" id="level2Screen">
+        <div class="card result-card">
+          <div class="result-top">
+            <div class="result-icon">🛂</div>
+            <div>
+              <h2 class="result-main-title">SUMMER PASSPORT</h2>
+              <div>Collect all trophies</div>
+              <div class="passport-id">PASSPORT ID: <span id="passportIdText3">SA-000000</span></div>
             </div>
           </div>
 
@@ -984,6 +930,13 @@
 
     const catchIcons = ['🍦','🏖️','🌊','🌴','🕶️','🐚'];
     const ranks = ['Rookie', 'Rider', 'Surfer', 'Legend'];
+    const level2AccessCode = 'ITFAIR2026';
+    const trophyMap = {
+      'SUN123': 'sun',
+      'WAVE456': 'wave',
+      'ICE789': 'ice'
+    };
+    const claimFormLink = 'https://forms.gle/REPLACE_WITH_YOUR_FORM_LINK';
 
     let index = 0;
     let score = 0;
@@ -996,12 +949,6 @@
     let countdownTimer = null;
     let toastTimer = null;
     let passportId = '';
-    const level2AccessCode = 'ITFAIR2026';
-    const trophyMap = {
-      'SUN123': 'sun',
-      'WAVE456': 'wave',
-      'ICE789': 'ice'
-    };
     let collected = [];
 
     const el = {
@@ -1014,11 +961,19 @@
       selectScreen: document.getElementById('selectScreen'),
       catchScreen: document.getElementById('catchScreen'),
       resultScreen: document.getElementById('resultScreen'),
+      level2InfoScreen: document.getElementById('level2InfoScreen'),
+      level2Screen: document.getElementById('level2Screen'),
       startBtn: document.getElementById('startBtn'),
       leftBtn: document.getElementById('leftBtn'),
       rightBtn: document.getElementById('rightBtn'),
       previewBtn: document.getElementById('previewBtn'),
       confirmBtn: document.getElementById('confirmBtn'),
+      nextBtn: document.getElementById('nextBtn'),
+      unlockLevel2Btn: document.getElementById('unlockLevel2Btn'),
+      addTrophyBtn: document.getElementById('addTrophyBtn'),
+      claimBtn: document.getElementById('claimBtn'),
+      backToStartBtn: document.getElementById('backToStartBtn'),
+      playAgainBtn: document.getElementById('playAgainBtn'),
       prevIcon: document.getElementById('prevIcon'),
       nextIcon: document.getElementById('nextIcon'),
       mainIcon: document.getElementById('mainIcon'),
@@ -1051,14 +1006,10 @@
       passportIdText: document.getElementById('passportIdText'),
       passportIdText2: document.getElementById('passportIdText2'),
       passportIdText3: document.getElementById('passportIdText3'),
-      nextBtn: document.getElementById('nextBtn'),
-      level2InfoScreen: document.getElementById('level2InfoScreen'),
-      level2Screen: document.getElementById('level2Screen'),
       level2CodeInput: document.getElementById('level2CodeInput'),
-      unlockLevel2Btn: document.getElementById('unlockLevel2Btn'),
       level2HintText: document.getElementById('level2HintText'),
-      playAgainBtn: document.getElementById('playAgainBtn'),
-      backToStartBtn: document.getElementById('backToStartBtn'),
+      trophyInput: document.getElementById('trophyInput'),
+      trophyStatus: document.getElementById('trophyStatus'),
       trophySun: document.getElementById('trophySun'),
       trophyWave: document.getElementById('trophyWave'),
       trophyIce: document.getElementById('trophyIce'),
@@ -1099,8 +1050,8 @@
     function updateHud() {
       el.hudPlayer.textContent = playerId || 'P-0000';
       el.hudScore.textContent = padScore(score);
-      el.hudLevel.textContent = '01';
-      el.hudStatus.textContent = confirmed ? 'Mission' : 'Ready';
+      el.hudLevel.textContent = el.level2Screen.classList.contains('hidden') ? '01' : '02';
+      el.hudStatus.textContent = el.level2Screen.classList.contains('hidden') ? (confirmed ? 'Mission' : 'Ready') : 'Passport';
       el.playerRank.textContent = rankFromScore(score);
     }
 
@@ -1123,7 +1074,6 @@
       const current = currentItem();
       const prev = items[(index - 1 + items.length) % items.length];
       const next = items[(index + 1) % items.length];
-
       el.prevIcon.textContent = prev.icon;
       el.nextIcon.textContent = next.icon;
       el.mainIcon.textContent = current.icon;
@@ -1181,10 +1131,8 @@
       clearInterval(countdownTimer);
       el.dialogText.textContent = 'Mission 1 starting soon... ' + count;
       flashScreen();
-
       countdownTimer = setInterval(() => {
         count -= 1;
-
         if (count > 0) {
           el.dialogText.textContent = 'Mission 1 starting soon... ' + count;
           flashScreen();
@@ -1225,11 +1173,7 @@
       el.catchHits.textContent = catchHits;
       el.catchTarget.textContent = 12;
       updateHud();
-
-      catchSpawner = setInterval(() => {
-        spawnCatchObject();
-      }, 400);
-
+      catchSpawner = setInterval(spawnCatchObject, 400);
       catchTimer = setInterval(() => {
         timeLeft -= 1;
         el.catchTime.textContent = timeLeft;
@@ -1244,9 +1188,7 @@
       obj.style.left = Math.random() * 88 + '%';
       obj.style.top = '-10px';
       el.catchArea.appendChild(obj);
-
       let caught = false;
-
       const fall = setInterval(() => {
         if (!obj.isConnected || caught) {
           clearInterval(fall);
@@ -1258,7 +1200,6 @@
           clearInterval(fall);
         }
       }, 30);
-
       obj.addEventListener('pointerdown', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -1312,13 +1253,12 @@
       el.trophySunText.textContent = hasSun ? 'Unlocked' : 'Locked • Find this code at the booth';
       el.trophyWaveText.textContent = hasWave ? 'Unlocked' : 'Locked • Find this code at the booth';
       el.trophyIceText.textContent = hasIce ? 'Unlocked' : 'Locked • Find this code at the booth';
-
       el.trophyStatus.textContent = `${collected.length}/3 collected`;
 
       if (collected.length === 3) {
-        document.getElementById('claimBtn').classList.remove('hidden');
+        el.claimBtn.classList.remove('hidden');
       } else {
-        document.getElementById('claimBtn').classList.add('hidden');
+        el.claimBtn.classList.add('hidden');
       }
     }
 
@@ -1329,18 +1269,17 @@
         showToast('Wrong code');
         return;
       }
-
       el.level2InfoScreen.classList.add('hidden');
       el.level2Screen.classList.remove('hidden');
       el.passportIdText3.textContent = passportId;
       renderTrophies();
+      updateHud();
       showToast('Level 2 unlocked');
-      document.getElementById('trophyInput').value = '';
       flashScreen();
     }
 
     function addTrophy() {
-      const code = document.getElementById('trophyInput').value.trim().toUpperCase();
+      const code = el.trophyInput.value.trim().toUpperCase();
       if (!trophyMap[code]) {
         showToast('Invalid code');
         return;
@@ -1351,20 +1290,15 @@
       } else {
         showToast('Already added');
       }
-
-      document.getElementById('trophyInput').value = '';
+      el.trophyInput.value = '';
       renderTrophies();
-
       if (collected.length === 3) {
         showToast('All trophies collected!');
       }
     }
 
-      el.level2InfoScreen.classList.add('hidden');
-      el.level2Screen.classList.remove('hidden');
-      el.passportIdText3.textContent = passportId;
-      showToast('Level 2 unlocked');
-      flashScreen();
+    function openClaimForm() {
+      window.open(claimFormLink, '_blank');
     }
 
     function goToSelection() {
@@ -1396,10 +1330,11 @@
       confirmed = false;
       playerId = generatePlayerId();
       passportId = generatePassportId();
+      collected = [];
       el.playerId.textContent = playerId;
       updateHud();
       updateSelectionView();
-
+      renderTrophies();
       if (toStart) {
         started = false;
         el.hud.classList.add('hidden');
@@ -1422,17 +1357,11 @@
         }
         return;
       }
-
       if (!el.selectScreen.classList.contains('hidden')) {
         if (e.key === 'ArrowRight') { e.preventDefault(); move('right'); }
         if (e.key === 'ArrowLeft') { e.preventDefault(); move('left'); }
         if (e.key.toLowerCase() === 'i') { e.preventDefault(); previewItem(); }
         if (e.key === 'Enter') { e.preventDefault(); confirmSelection(); }
-      }
-
-      if (!el.resultScreen.classList.contains('hidden') && e.key.toLowerCase() === 'r') {
-        e.preventDefault();
-        resetGame(false);
       }
     }
 
@@ -1464,16 +1393,13 @@
       const target = new Date('2026-05-10T00:00:00').getTime();
       const now = new Date().getTime();
       const diff = target - now;
-
       if (diff <= 0) {
         el.countdown.textContent = '00d 00h 00m';
         return;
       }
-
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
       const minutes = Math.floor((diff / (1000 * 60)) % 60);
-
       el.countdown.textContent = `${days}d ${hours}h ${minutes}m`;
     }
 
@@ -1485,10 +1411,8 @@
     el.playAgainBtn.addEventListener('click', () => resetGame(false));
     el.nextBtn.addEventListener('click', openLevel2Info);
     el.unlockLevel2Btn.addEventListener('click', unlockLevel2);
-    document.getElementById('addTrophyBtn').addEventListener('click', addTrophy);
-    document.getElementById('claimBtn').addEventListener('click', () => {
-      window.open('https://forms.gle/REPLACE_WITH_YOUR_FORM_LINK', '_blank');
-    });
+    el.addTrophyBtn.addEventListener('click', addTrophy);
+    el.claimBtn.addEventListener('click', openClaimForm);
     el.backToStartBtn.addEventListener('click', () => resetGame(true));
     document.addEventListener('keydown', handleKeydown);
 
