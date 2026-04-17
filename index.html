@@ -588,6 +588,8 @@
     .result-btn:hover { transform: translateY(-2px); background: #46387f; }
     .result-btn.primary { background: #007f9c; }
     .result-btn.primary:hover { background: #0e97b6; }
+    .result-btn.gold { background: #d4a514; color: #1a1635; }
+    .result-btn.gold:hover { background: #e6b81f; }
 
     .trophy-box {
       min-height: 150px;
@@ -842,7 +844,7 @@
           </div>
           <div class="result-actions">
             <button class="result-btn primary" id="playAgainBtn">Play Again</button>
-            <button class="result-btn" id="nextBtn">Next</button>
+            <button class="result-btn gold" id="nextBtn">Next</button>
             <button class="result-btn" id="backToStartBtn">Back</button>
           </div>
         </div>
@@ -906,7 +908,10 @@
             </div>
           </div>
 
-          <div style="display:grid; gap:10px; max-width:420px; margin:10px auto 0;">
+          <div id="trophyActions" style="display:grid; gap:10px; max-width:420px; margin:10px auto 0;">
+            <div class="small-note hidden" id="claimMessage" style="text-align:center; color:#d9f2ff; font-size:13px;">
+              Congratulations! You completed the mission. Enter your details to join the raffle.
+            </div>
             <input id="trophyInput" type="text" placeholder="ENTER TROPHY CODE" style="width:100%; padding:12px; border:4px solid var(--panel-border); text-align:center;">
             <button class="result-btn" id="addTrophyBtn">Add Trophy</button>
             <button class="result-btn primary hidden" id="claimBtn">Open Form</button>
@@ -949,7 +954,7 @@
     let countdownTimer = null;
     let toastTimer = null;
     let passportId = '';
-    let collected = [];
+    let collected = JSON.parse(localStorage.getItem('summerCollectedTrophies') || '[]');
 
     const el = {
       hud: document.getElementById('hud'),
@@ -972,6 +977,8 @@
       unlockLevel2Btn: document.getElementById('unlockLevel2Btn'),
       addTrophyBtn: document.getElementById('addTrophyBtn'),
       claimBtn: document.getElementById('claimBtn'),
+      claimMessage: document.getElementById('claimMessage'),
+      trophyActions: document.getElementById('trophyActions'),
       backToStartBtn: document.getElementById('backToStartBtn'),
       playAgainBtn: document.getElementById('playAgainBtn'),
       prevIcon: document.getElementById('prevIcon'),
@@ -1255,10 +1262,17 @@
       el.trophyIceText.textContent = hasIce ? 'Unlocked' : 'Locked • Find this code at the booth';
       el.trophyStatus.textContent = `${collected.length}/3 collected`;
 
-      if (collected.length === 3) {
+      const finished = collected.length === 3;
+      if (finished) {
         el.claimBtn.classList.remove('hidden');
+        el.claimMessage.classList.remove('hidden');
+        el.trophyInput.classList.add('hidden');
+        el.addTrophyBtn.classList.add('hidden');
       } else {
         el.claimBtn.classList.add('hidden');
+        el.claimMessage.classList.add('hidden');
+        el.trophyInput.classList.remove('hidden');
+        el.addTrophyBtn.classList.remove('hidden');
       }
     }
 
@@ -1286,6 +1300,7 @@
       }
       if (!collected.includes(code)) {
         collected.push(code);
+        localStorage.setItem('summerCollectedTrophies', JSON.stringify(collected));
         showToast('Trophy added');
       } else {
         showToast('Already added');
@@ -1330,7 +1345,7 @@
       confirmed = false;
       playerId = generatePlayerId();
       passportId = generatePassportId();
-      collected = [];
+      collected = JSON.parse(localStorage.getItem('summerCollectedTrophies') || '[]');
       el.playerId.textContent = playerId;
       updateHud();
       updateSelectionView();
@@ -1408,7 +1423,10 @@
     el.rightBtn.addEventListener('click', () => move('right'));
     el.previewBtn.addEventListener('click', previewItem);
     el.confirmBtn.addEventListener('click', confirmSelection);
-    el.playAgainBtn.addEventListener('click', () => resetGame(false));
+    el.playAgainBtn.addEventListener('click', () => {
+      localStorage.removeItem('summerCollectedTrophies');
+      resetGame(false);
+    });
     el.nextBtn.addEventListener('click', openLevel2Info);
     el.unlockLevel2Btn.addEventListener('click', unlockLevel2);
     el.addTrophyBtn.addEventListener('click', addTrophy);
