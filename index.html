@@ -34,7 +34,7 @@
       background: #0c2440;
       color: var(--white);
     }
-    body { overflow: hidden; }
+    body { overflow: auto; }
     button, input { font: inherit; }
 
     .game {
@@ -820,7 +820,7 @@
           <div class="catch-hud">
             <div>Time: <strong id="catchTime">10</strong></div>
             <div>Hits: <strong id="catchHits">0</strong></div>
-            <div>Target: <strong id="catchTarget">12</strong></div>
+            <div>Target: <strong id="catchTarget">15</strong></div>
           </div>
           <div class="catch-area" id="catchArea"></div>
         </div>
@@ -942,12 +942,12 @@
       'WAVE456': 'wave',
       'ICE789': 'ice'
     };
-    const claimFormLink = 'https://forms.gle/EZGqy5DWHoigSwuaA';
+    const claimFormLink = 'https://forms.gle/REPLACE_WITH_YOUR_FORM_LINK';
 
-    let index = 0;
-    let score = 0;
+    let index = Number(localStorage.getItem('summerIndex') || 0);
+    let score = Number(localStorage.getItem('summerScore') || 0);
     let started = false;
-    let confirmed = false;
+    let confirmed = localStorage.getItem('summerConfirmed') === 'true';
     let playerId = localStorage.getItem('summerPlayerId') || '';
     let catchHits = 0;
     let catchTimer = null;
@@ -1030,6 +1030,12 @@
     function setStage(stage) {
       currentStage = stage;
       localStorage.setItem('summerCurrentStage', stage);
+    }
+
+    function saveProgress() {
+      localStorage.setItem('summerIndex', String(index));
+      localStorage.setItem('summerScore', String(score));
+      localStorage.setItem('summerConfirmed', String(confirmed));
     }
 
     function currentItem() {
@@ -1156,6 +1162,7 @@
       if (!started || confirmed) return;
       if (direction === 'right') index = (index + 1) % items.length;
       else index = (index - 1 + items.length) % items.length;
+      saveProgress();
       updateSelectionView();
     }
 
@@ -1190,6 +1197,7 @@
       if (!started || confirmed) return;
       confirmed = true;
       score += currentItem().cool + currentItem().fun + currentItem().chill;
+      saveProgress();
       el.selectState.textContent = 'Mission 1';
       el.dialogText.textContent = 'Mission 1 starting soon...';
       updateHud();
@@ -1210,7 +1218,7 @@
       catchHits = 0;
       el.catchTime.textContent = timeLeft;
       el.catchHits.textContent = catchHits;
-      el.catchTarget.textContent = 12;
+      el.catchTarget.textContent = 15;
       updateHud();
       catchSpawner = setInterval(spawnCatchObject, 400);
       catchTimer = setInterval(() => {
@@ -1247,9 +1255,13 @@
         clearInterval(fall);
         catchHits += 1;
         score += 10;
+        saveProgress();
         el.catchHits.textContent = catchHits;
         updateHud();
         obj.remove();
+        if (catchHits >= 15) {
+          finishCatchGame();
+        }
       }, { once: true });
     }
 
@@ -1334,6 +1346,7 @@
         showToast('Already added');
       }
       el.trophyInput.value = '';
+      saveProgress();
       renderTrophies();
       if (collected.length === 3) {
         showToast('All trophies collected!');
@@ -1352,6 +1365,7 @@
       clearInterval(catchSpawner);
       generatePlayerId();
       el.playerId.textContent = playerId;
+      saveProgress();
       showScreen('select');
       el.dialogText.textContent = 'Find the pattern. 20260510.';
       updateSelectionView();
@@ -1369,6 +1383,7 @@
       passportId = generatePassportId();
       collected = JSON.parse(localStorage.getItem('summerCollectedTrophies') || '[]');
       el.playerId.textContent = playerId;
+      saveProgress();
       updateSelectionView();
       renderTrophies();
       if (toStart) {
@@ -1384,6 +1399,9 @@
       localStorage.removeItem('summerCurrentStage');
       localStorage.removeItem('summerPassportId');
       localStorage.removeItem('summerPlayerId');
+      localStorage.removeItem('summerIndex');
+      localStorage.removeItem('summerScore');
+      localStorage.removeItem('summerConfirmed');
       collected = [];
       passportId = generatePassportId();
       playerId = '';
@@ -1461,6 +1479,7 @@
     initAmbientEffects();
     passportId = generatePassportId();
     generatePlayerId();
+    saveProgress();
     renderTrophies();
     updateExpoCountdown();
     setInterval(updateExpoCountdown, 60000);
