@@ -905,6 +905,7 @@
           <div style="display:grid; gap:10px; max-width:420px; margin:6px auto 0;">
             <input id="level2CodeInput" type="text" placeholder="ENTER LEVEL 2 CODE" style="width:100%; padding:14px; border:4px solid var(--panel-border); font:inherit; text-transform:uppercase; text-align:center; font-weight:bold; color:var(--text);">
             <button class="result-btn primary" id="unlockLevel2Btn">Unlock Level 2</button>
+            <button class="result-btn" id="level2BackBtn">Back</button>
             <div class="small-note" id="level2HintText" style="text-align:center; color:#d9f2ff;">Waiting for the release code.</div>
           </div>
         </div>
@@ -976,11 +977,11 @@
     const ranks = ['Rookie', 'Rider', 'Surfer', 'Legend'];
     const level2AccessCode = 'ITFAIR2026';
     const trophyMap = {
-      'SUN123': 'sun',
-      'WAVE456': 'wave',
-      'ICE789': 'ice'
+      'GX-7A3K-91': 'sun',
+      'PL-4Q8Z-26': 'wave',
+      'CM-9X2L-58': 'ice'
     };
-    const claimFormLink = 'https://forms.gle/5bbVHnUx7cWKDkkk9';
+    const claimFormLink = 'https://forms.gle/EvjxRZ6BBoRMQpqw8';
 
     let index = Number(localStorage.getItem('summerIndex') || 0);
     let score = Number(localStorage.getItem('summerScore') || 0);
@@ -1328,9 +1329,9 @@
     }
 
     function renderTrophies() {
-      const hasSun = collected.includes('SUN123');
-      const hasWave = collected.includes('WAVE456');
-      const hasIce = collected.includes('ICE789');
+      const hasSun = collected.includes('GX-7A3K-91');
+      const hasWave = collected.includes('PL-4Q8Z-26');
+      const hasIce = collected.includes('CM-9X2L-58');
 
       el.trophySun.classList.toggle('unlocked', hasSun);
       el.trophyWave.classList.toggle('unlocked', hasWave);
@@ -1508,6 +1509,8 @@
     el.playAgainBtn.addEventListener('click', () => hardResetAll());
     el.nextBtn.addEventListener('click', openLevel2Info);
     el.unlockLevel2Btn.addEventListener('click', unlockLevel2);
+    const level2BackBtn = document.getElementById('level2BackBtn');
+    if (level2BackBtn) level2BackBtn.addEventListener('click', () => showScreen('result'));
     el.addTrophyBtn.addEventListener('click', addTrophy);
     el.claimBtn.addEventListener('click', openClaimForm);
     el.backToStartBtn.addEventListener('click', () => hardResetAll());
