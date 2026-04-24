@@ -898,10 +898,12 @@
               <div class="passport-id">SPACE ID: <span id="passportIdText2">SA-000000</span></div>
             </div>
           </div>
-          <div class="result-box" style="text-align:center;">
-            <small>Next Step</small>
-            <strong>Level 2 will begin on 10 May 2026.<br>To continue the missions, wait for that date and enter the code released then.<br>Code will be posted on KSU_IT on X.</strong>
-          </div>
+          <strong>
+REAL-WORLD MISSION: CCIS COLLEGE<br>
+DATE: 10 MAY 2026<br>
+Access code drops on KSU_IT on X<br>
+Find the hidden astronauts and collect all codes
+</strong>
           <div style="display:grid; gap:10px; max-width:420px; margin:6px auto 0;">
             <input id="level2CodeInput" type="text" placeholder="ENTER LEVEL 2 CODE" style="width:100%; padding:14px; border:4px solid var(--panel-border); font:inherit; text-transform:uppercase; text-align:center; font-weight:bold; color:var(--text);">
             <button class="result-btn primary" id="unlockLevel2Btn">Unlock Level 2</button>
@@ -1329,34 +1331,36 @@
     }
 
     function renderTrophies() {
-      const hasSun = collected.includes('GX-7A3K-91');
-      const hasWave = collected.includes('PL-4Q8Z-26');
-      const hasIce = collected.includes('CM-9X2L-58');
+  const hasSun = collected.includes('GX-7A3K-91');
+  const hasWave = collected.includes('PL-4Q8Z-26');
+  const hasIce = collected.includes('CM-9X2L-58');
 
-      el.trophySun.classList.toggle('unlocked', hasSun);
-      el.trophyWave.classList.toggle('unlocked', hasWave);
-      el.trophyIce.classList.toggle('unlocked', hasIce);
+  el.trophySun.classList.toggle('unlocked', hasSun);
+  el.trophyWave.classList.toggle('unlocked', hasWave);
+  el.trophyIce.classList.toggle('unlocked', hasIce);
 
-      el.trophySunText.textContent = hasSun ? 'Unlocked' : 'Locked • Find this code at the booth';
-      el.trophyWaveText.textContent = hasWave ? 'Unlocked' : 'Locked • Find this code at the booth';
-      el.trophyIceText.textContent = hasIce ? 'Unlocked' : 'Locked • Find this code at the booth';
-      el.trophyStatus.textContent = `${collected.length}/3 collected`;
+  el.trophySunText.textContent = hasSun ? 'Unlocked' : 'Locked • Ask the tiny astronaut 🧑‍🚀';
+  el.trophyWaveText.textContent = hasWave ? 'Unlocked' : 'Locked • The astronaut knows 👀';
+  el.trophyIceText.textContent = hasIce ? 'Unlocked' : 'Locked • Check near a space buddy 🚀';
 
-      const finished = collected.length === 3;
-      if (finished) {
-        el.claimBtn.classList.remove('hidden');
-        el.claimMessage.classList.remove('hidden');
-        el.trophyInput.classList.add('hidden');
-        el.addTrophyBtn.classList.add('hidden');
-      } else {
-        el.claimBtn.classList.add('hidden');
-        el.claimMessage.classList.add('hidden');
-        el.trophyInput.classList.remove('hidden');
-        el.addTrophyBtn.classList.remove('hidden');
-      }
-      el.level2RestartBtn.classList.remove('hidden');
-    }
+  const finished = collected.length === 3;
 
+  if (finished) {
+    el.trophyStatus.textContent = 'Mission complete! All codes collected 🏆';
+    el.claimBtn.classList.remove('hidden');
+    el.claimMessage.classList.remove('hidden');
+    el.trophyInput.classList.add('hidden');
+    el.addTrophyBtn.classList.add('hidden');
+  } else {
+    el.trophyStatus.textContent = `${collected.length}/3 collected • Astronauts are hiding the codes somewhere 👀`;
+    el.claimBtn.classList.add('hidden');
+    el.claimMessage.classList.add('hidden');
+    el.trophyInput.classList.remove('hidden');
+    el.addTrophyBtn.classList.remove('hidden');
+  }
+
+  el.level2RestartBtn.classList.remove('hidden');
+}
     function unlockLevel2() {
       const entered = el.level2CodeInput.value.trim().toUpperCase();
       if (entered !== level2AccessCode) {
