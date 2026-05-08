@@ -898,12 +898,10 @@
               <div class="passport-id">SPACE ID: <span id="passportIdText2">SA-000000</span></div>
             </div>
           </div>
-          <strong>
-REAL-WORLD MISSION: CCIS COLLEGE<br>
-DATE: 10 MAY 2026<br>
-Access code drops on KSU_IT on X<br>
-Find the hidden astronauts and collect all codes
-</strong>
+          <div class="result-box" style="text-align:center;">
+            <small>Next Step</small>
+            <strong>Level 2 will begin on 10 May 2026.<br>To continue the missions, wait for that date and enter the code released then.<br>Code will be posted on KSU_IT on X.</strong>
+          </div>
           <div style="display:grid; gap:10px; max-width:420px; margin:6px auto 0;">
             <input id="level2CodeInput" type="text" placeholder="ENTER LEVEL 2 CODE" style="width:100%; padding:14px; border:4px solid var(--panel-border); font:inherit; text-transform:uppercase; text-align:center; font-weight:bold; color:var(--text);">
             <button class="result-btn primary" id="unlockLevel2Btn">Unlock Level 2</button>
@@ -983,7 +981,7 @@ Find the hidden astronauts and collect all codes
       'PL-4Q8Z-26': 'wave',
       'CM-9X2L-58': 'ice'
     };
-    const claimFormLink = 'https://forms.gle/EvjxRZ6BBoRMQpqw8';
+    const claimFormLink = 'https://forms.gle/f79C16z3m5zGSCL1A';
 
     let index = Number(localStorage.getItem('summerIndex') || 0);
     let score = Number(localStorage.getItem('summerScore') || 0);
@@ -997,7 +995,7 @@ Find the hidden astronauts and collect all codes
     let toastTimer = null;
     let passportId = '';
     let collected = JSON.parse(localStorage.getItem('summerCollectedTrophies') || '[]');
-    let currentStage = localStorage.getItem('summerCurrentStage') || 'start';
+    let currentStage = localStorage.getItem('summerCurrentStage') || 'level2';
 
     const el = {
       hud: document.getElementById('hud'),
@@ -1331,36 +1329,34 @@ Find the hidden astronauts and collect all codes
     }
 
     function renderTrophies() {
-  const hasSun = collected.includes('GX-7A3K-91');
-  const hasWave = collected.includes('PL-4Q8Z-26');
-  const hasIce = collected.includes('CM-9X2L-58');
+      const hasSun = collected.includes('GX-7A3K-91');
+      const hasWave = collected.includes('PL-4Q8Z-26');
+      const hasIce = collected.includes('CM-9X2L-58');
 
-  el.trophySun.classList.toggle('unlocked', hasSun);
-  el.trophyWave.classList.toggle('unlocked', hasWave);
-  el.trophyIce.classList.toggle('unlocked', hasIce);
+      el.trophySun.classList.toggle('unlocked', hasSun);
+      el.trophyWave.classList.toggle('unlocked', hasWave);
+      el.trophyIce.classList.toggle('unlocked', hasIce);
 
-  el.trophySunText.textContent = hasSun ? 'Unlocked' : 'Locked • Ask the tiny astronaut 🧑‍🚀';
-  el.trophyWaveText.textContent = hasWave ? 'Unlocked' : 'Locked • The astronaut knows 👀';
-  el.trophyIceText.textContent = hasIce ? 'Unlocked' : 'Locked • Check near a space buddy 🚀';
+      el.trophySunText.textContent = hasSun ? 'Unlocked' : 'Locked • Find this code at the booth';
+      el.trophyWaveText.textContent = hasWave ? 'Unlocked' : 'Locked • Find this code at the booth';
+      el.trophyIceText.textContent = hasIce ? 'Unlocked' : 'Locked • Find this code at the booth';
+      el.trophyStatus.textContent = `${collected.length}/3 collected`;
 
-  const finished = collected.length === 3;
+      const finished = collected.length === 3;
+      if (finished) {
+        el.claimBtn.classList.remove('hidden');
+        el.claimMessage.classList.remove('hidden');
+        el.trophyInput.classList.add('hidden');
+        el.addTrophyBtn.classList.add('hidden');
+      } else {
+        el.claimBtn.classList.add('hidden');
+        el.claimMessage.classList.add('hidden');
+        el.trophyInput.classList.remove('hidden');
+        el.addTrophyBtn.classList.remove('hidden');
+      }
+      el.level2RestartBtn.classList.remove('hidden');
+    }
 
-  if (finished) {
-    el.trophyStatus.textContent = 'Mission complete! All codes collected 🏆';
-    el.claimBtn.classList.remove('hidden');
-    el.claimMessage.classList.remove('hidden');
-    el.trophyInput.classList.add('hidden');
-    el.addTrophyBtn.classList.add('hidden');
-  } else {
-    el.trophyStatus.textContent = `${collected.length}/3 collected • Astronauts are hiding the codes somewhere 👀`;
-    el.claimBtn.classList.add('hidden');
-    el.claimMessage.classList.add('hidden');
-    el.trophyInput.classList.remove('hidden');
-    el.addTrophyBtn.classList.remove('hidden');
-  }
-
-  el.level2RestartBtn.classList.remove('hidden');
-}
     function unlockLevel2() {
       const entered = el.level2CodeInput.value.trim().toUpperCase();
       if (entered !== level2AccessCode) {
@@ -1440,15 +1436,14 @@ Find the hidden astronauts and collect all codes
     function hardResetAll() {
       localStorage.removeItem('summerCollectedTrophies');
       localStorage.removeItem('summerCurrentStage');
-      localStorage.removeItem('summerPassportId');
-      localStorage.removeItem('summerPlayerId');
       localStorage.removeItem('summerIndex');
       localStorage.removeItem('summerScore');
       localStorage.removeItem('summerConfirmed');
       collected = [];
-      passportId = generatePassportId();
-      playerId = '';
-      resetGame(true);
+      setStage('level2');
+      showScreen('level2');
+      el.passportIdText3.textContent = passportId;
+      renderTrophies();
     }
 
     function handleKeydown(e) {
@@ -1529,37 +1524,12 @@ Find the hidden astronauts and collect all codes
     updateExpoCountdown();
     setInterval(updateExpoCountdown, 60000);
 
-    if (currentStage === 'select') {
-      started = true;
-      el.playerId.textContent = playerId;
-      updateSelectionView();
-      showScreen('select');
-    } else if (currentStage === 'catch') {
-      started = true;
-      confirmed = true;
-      el.playerId.textContent = playerId;
-      updateSelectionView();
-      openCatchGame();
-    } else if (currentStage === 'result') {
-      started = true;
-      el.playerId.textContent = playerId;
-      updateSelectionView();
-      showResult();
-    } else if (currentStage === 'level2info') {
-      started = true;
-      el.playerId.textContent = playerId;
-      updateSelectionView();
-      openLevel2Info();
-    } else if (currentStage === 'level2') {
-      started = true;
-      el.playerId.textContent = playerId;
-      updateSelectionView();
-      showScreen('level2');
-      el.passportIdText3.textContent = passportId;
-      renderTrophies();
-    } else {
-      resetGame(true);
-    }
+    started = true;
+    el.playerId.textContent = playerId;
+    updateSelectionView();
+    showScreen('level2');
+    el.passportIdText3.textContent = passportId;
+    renderTrophies();
   </script>
 </body>
 </html>
